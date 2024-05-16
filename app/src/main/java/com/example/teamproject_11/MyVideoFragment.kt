@@ -60,19 +60,19 @@ class MyVideoFragment : Fragment() {
     ): View? {
         // MainActivity로부터 좋아요 받은 항목을 가져옴
         val mainActivity = activity as MainActivity
-        likedItems = mainActivity.itemList
+        likedItems = mainActivity.likedItems
 
         Log.d("BookmarkFragment", "#jblee likedItems size = ${likedItems.size}")
 
         // 어댑터 설정
         adapter = MyVideoAdapter(mContext).apply {
-            items = likedItems.toMutableList()
+            myVideoitems = likedItems.toMutableList()
         }
 
         // 바인딩 및 RecyclerView 설정
-        binding = FragmentBookmarkBinding.inflate(inflater, container, false).apply {
-            rvBookmark.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            rvBookmark.adapter = adapter
+        binding = FragmentMyVideoBinding.inflate(inflater, container, false).apply {
+            myVideoRecycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            myVideoRecycler.adapter = adapter
         }
 
         return binding?.root

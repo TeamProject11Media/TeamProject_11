@@ -14,6 +14,7 @@ import com.example.teamproject_11.home.data.HomeVideoModel
 class MyVideoAdapter(private val mContext: Context) : RecyclerView.Adapter<MyVideoAdapter.MyViewHolder>(){
     private var listener: MyVideoAdapter.OnItemClickListener? = null
     var itemList: List<HomeVideoModel> = listOf()
+    var myVideoitems = mutableListOf<HomeVideoModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemMyVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)

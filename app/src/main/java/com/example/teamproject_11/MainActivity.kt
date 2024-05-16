@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
+    var likedItems: ArrayList<HomeVideoModel> = ArrayList()
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
