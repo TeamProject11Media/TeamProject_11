@@ -1,12 +1,16 @@
 package com.example.teamproject_11
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.teamproject_11.databinding.ActivityMainBinding
+import com.example.teamproject_11.databinding.FragmentMyVideoBinding
+import com.example.teamproject_11.home.data.HomeVideoModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +26,25 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MyVideoFragment : Fragment() {
+
+    private lateinit var mContext: Context
+
+    // 바인딩 객체를 null 허용으로 설정 (프래그먼트의 뷰가 파괴될 때 null 처리하기 위함)
+    private var binding: FragmentMyVideoBinding? = null
+    private lateinit var adapter: MyVideoAdapter
+
+    // 사용자의 좋아요를 받은 항목을 저장하는 리스트
+    private var likedItems: List<HomeVideoModel> = listOf()
+
     // TODO: Rename and change types of parameters
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private var param1: String? = null
     private var param2: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +58,24 @@ class MyVideoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // MainActivity로부터 좋아요 받은 항목을 가져옴
+        val mainActivity = activity as MainActivity
+        likedItems = mainActivity.itemList
 
+        Log.d("BookmarkFragment", "#jblee likedItems size = ${likedItems.size}")
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_video, container, false)
+        // 어댑터 설정
+        adapter = MyVideoAdapter(mContext).apply {
+            items = likedItems.toMutableList()
+        }
+
+        // 바인딩 및 RecyclerView 설정
+        binding = FragmentBookmarkBinding.inflate(inflater, container, false).apply {
+            rvBookmark.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            rvBookmark.adapter = adapter
+        }
+
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
