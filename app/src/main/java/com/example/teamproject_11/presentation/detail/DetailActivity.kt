@@ -1,13 +1,15 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.presentation.detail
 
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.example.teamproject_11.data.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityDetailBinding
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +24,7 @@ class DetailActivity : AppCompatActivity() {
     private val data by lazy {
         intent.getParcelableExtra<HomeVideoModel>("ClickItem")
     }
+    private lateinit var detailAdapter: DetailAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -30,6 +33,8 @@ class DetailActivity : AppCompatActivity() {
         settingDesc()
         settingImage()
         settingDate()
+
+        initViewModel()
     }
 
 
@@ -77,5 +82,22 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initViewModel() {
+        viewModel.dummyData.observe(this) {
+            detailAdapter = DetailAdapter()
+            detailAdapter.itemList = it
+            with(binding.detailRecommandList) {
+                adapter = detailAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            }
+            detailAdapter.setItem(it)
+        }
+        fetchVideo()
+    }
+
+    private fun fetchVideo() {
+        viewModel.fetchPetVideo()
     }
 }

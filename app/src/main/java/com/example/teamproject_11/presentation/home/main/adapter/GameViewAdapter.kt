@@ -1,13 +1,13 @@
-package com.example.teamproject_11.home.adapter
+package com.example.teamproject_11.presentation.home.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.teamproject_11.databinding.ItemCategoryBinding
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 
-class MusicViewAdapter : RecyclerView.Adapter<MusicViewAdapter.MyViewHolder>() {
+class GameViewAdapter : RecyclerView.Adapter<GameViewAdapter.MyViewHolder>() {
 
     var itemList: List<HomeVideoModel> = listOf()
 

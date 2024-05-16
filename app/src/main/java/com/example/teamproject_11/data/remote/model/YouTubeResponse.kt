@@ -1,7 +1,5 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.data.remote.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 //유튜브 API 데이터 전송 형태

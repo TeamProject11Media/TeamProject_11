@@ -1,10 +1,10 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.data.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 
 
 @Database(entities = [HomeVideoModel::class], exportSchema = false, version = 1)

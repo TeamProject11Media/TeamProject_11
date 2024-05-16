@@ -1,14 +1,17 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.presentation.search
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamproject_11.databinding.FragmentSearchBinding
+import com.example.teamproject_11.presentation.detail.DetailActivity
 import com.google.gson.Gson
 
 class SearchFragment : Fragment() {

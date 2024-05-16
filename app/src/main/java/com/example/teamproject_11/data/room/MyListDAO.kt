@@ -1,10 +1,10 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 
 @Dao
 interface MyListDAO {

@@ -1,5 +1,4 @@
-package com.example.teamproject_11
-
+package com.example.teamproject_11.presentation.main
 
 // HomeVideoModel의 타입 구분을 위한 enum class
 enum class DataType(val viewType: Int) {

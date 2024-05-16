@@ -1,14 +1,13 @@
-package com.example.teamproject_11.home.adapter
+package com.example.teamproject_11.presentation.home.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.teamproject_11.databinding.ItemMostBinding
-import com.example.teamproject_11.DataType
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.databinding.ItemCategoryBinding
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 
-class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
+class MovieViewAdapter : RecyclerView.Adapter<MovieViewAdapter.MyViewHolder>() {
 
     var itemList: List<HomeVideoModel> = listOf()
 
@@ -21,13 +20,12 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-    inner class MyViewHolder(private val binding: ItemMostBinding) :
+    inner class MyViewHolder (private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
-            binding.ivMost.load(item.imgThumbnail) {
+            binding.ivCategory.load(item.imgThumbnail) {
                 crossfade(true)
             }
-            binding.ivMost.clipToOutline = true
 
             itemView.setOnClickListener {
                 listener?.onItemClick(item)
@@ -36,16 +34,8 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val dataType = DataType.entries.find { it.viewType == viewType }
-        return when(dataType){
-            DataType.MOST ->{val binding = ItemMostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return MyViewHolder(binding)
-            }
-            else -> {
-                val binding = ItemMostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return MyViewHolder(binding)
-            }
-        }
+        val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -59,8 +49,9 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
         }
     }
 
-    fun setItems(data: List<HomeVideoModel>) {
+    fun setItem(data: List<HomeVideoModel>) {
         this.itemList = data
         notifyDataSetChanged()
     }
+
 }

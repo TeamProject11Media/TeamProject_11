@@ -1,4 +1,4 @@
-package com.example.teamproject_11
+package com.example.teamproject_11.presentation.main
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,9 +6,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.example.teamproject_11.R
 import com.example.teamproject_11.databinding.ActivityMainBinding
-import com.example.teamproject_11.home.ViewPagerAdapter
-import com.example.teamproject_11.home.data.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
+import com.example.teamproject_11.presentation.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
