@@ -1,7 +1,6 @@
 package com.example.teamproject_11.data.repository
 
 import com.example.teamproject_11.data.remote.VideoApiService
-import com.example.teamproject_11.domain.model.YouTubeResponseEntity
 import com.example.teamproject_11.domain.model.toEntity
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 
@@ -18,8 +17,14 @@ class VideoApiServiceImpl(
         regionCode: String,
         channelId: String?,
         pageToken: String?,
-    ) = videoApiService.getVideoInfo(apiKey, part, order, type, maxResult, categoryId, regionCode, channelId, pageToken).toEntity()
+    ) = videoApiService.getVideoInfo(apiKey, part, order, type, maxResult, categoryId, regionCode, channelId).toEntity()
 
-
-
+    override suspend fun searchVideo(
+        apiKey: String,
+        part: String,
+        type: String,
+        maxResult: Int,
+        regionCode: String,
+        q: String?
+    ) = videoApiService.searchVideo(apiKey, part, type, maxResult, regionCode, q).toEntity()
 }

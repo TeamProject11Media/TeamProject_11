@@ -17,7 +17,16 @@ interface VideoApiService {
         @Query("maxResults") maxResult: Int,
         @Query("videoCategoryId") categoryId: String? = null,
         @Query("regionCode") regionCode: String = "KR",
-        @Query("channelId") channelId: String? = null,
-        @Query("pageToken") pageToken: String? = null,
+        @Query("channelId") channelId: String? = null
+    ): YouTubeResponse
+
+    @GET("search")
+    suspend fun searchVideo(
+        @Query("key") apiKey: String = RetroClient.API_KEY,
+        @Query("part") part: String = "snippet",
+        @Query("type") type: String = "video",
+        @Query("maxResults") maxResult: Int,
+        @Query("regionCode") regionCode: String = "KR",
+        @Query("q") query: String?
     ): YouTubeResponse
 }

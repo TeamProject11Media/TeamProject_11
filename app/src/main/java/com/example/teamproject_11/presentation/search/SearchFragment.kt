@@ -1,7 +1,7 @@
 package com.example.teamproject_11.presentation.search
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,41 +9,48 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamproject_11.databinding.FragmentSearchBinding
-import com.example.teamproject_11.presentation.detail.DetailActivity
-import com.google.gson.Gson
+import com.example.teamproject_11.presentation.home.main.HomeViewModel
+import com.example.teamproject_11.presentation.home.main.HomeViewModelFactory
 
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding: FragmentSearchBinding
+        get() = _binding!!
     private lateinit var searchAdapter: SearchAdapter
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // SearchAdapter 초기화
         searchAdapter = SearchAdapter(emptyList(), object : SearchAdapter.OnItemClickListener {
-            // 아이템 클릭시 DetailActivity intent 전달
             override fun onClick(view: View, position: Int) {
-                val selectedItem = searchAdapter.items[position]
-                val intent = Intent(context, DetailActivity::class.java)
-                val json = Gson().toJson(selectedItem.items)
-                intent.putExtra("searchQuery", json)
-                startActivity(intent)
+                // 클릭한 비디오를 디테일 액티비티로 전달
+//                val videoModel = searchAdapter.items[position]
+//                (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
+
+                viewModel.video.observe(viewLifecycleOwner) {
+                    searchAdapter.notifyDataSetChanged()
+                }
             }
         })
 
         setRecyclerView()
         setUpListener()
+        observeViewModel()
     }
 
     private fun setRecyclerView() {
@@ -71,5 +78,19 @@ class SearchFragment : Fragment() {
 
     private fun performSearch() {
         val searchQuery = binding.etSearch.text.toString()
+        viewModel.searchVideos(searchQuery)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun observeViewModel() {
+        viewModel.video.observe(viewLifecycleOwner) {
+            searchAdapter.items
+            searchAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

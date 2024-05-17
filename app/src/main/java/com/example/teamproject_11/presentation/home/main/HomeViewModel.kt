@@ -8,16 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.teamproject_11.network.RetroClient
-import com.example.teamproject_11.data.model.YouTubeResponse
-import com.example.teamproject_11.data.remote.VideoApiService
 import com.example.teamproject_11.data.repository.VideoApiServiceImpl
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class HomeViewModel(
@@ -26,7 +21,7 @@ class HomeViewModel(
 
 
     private val _videos = MutableLiveData<List<HomeVideoModel>>()
-    val videos : LiveData<List<HomeVideoModel>> get() = _videos
+    val video: LiveData<List<HomeVideoModel>> = _videos
 
     private val _gameVideos = MutableLiveData<List<HomeVideoModel>>()
     val gameVideo: LiveData<List<HomeVideoModel>> = _gameVideos
@@ -37,22 +32,20 @@ class HomeViewModel(
     private val _petVideos = MutableLiveData<List<HomeVideoModel>>()
     val petVideo: LiveData<List<HomeVideoModel>> = _petVideos
 
-    private val _selectVideos = MutableLiveData<List<HomeVideoModel>>()
-    val selectVideos: LiveData<List<HomeVideoModel>> = _selectVideos
-
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
 
 
-    fun fetchPopularVideos() {
+    fun fetchPopularVideos(){
         viewModelScope.launch {
             runCatching {
                 val response = repository.getVideoInfo(
                     apiKey = RetroClient.API_KEY,
                     order = "mostPopular",
+                    maxResult = 10,
                     regionCode = "KR",
-                    maxResult = 10
+                    pageToken = null
                 )
                 val videoModels = response.items!!.map {
                     HomeVideoModel(
@@ -65,8 +58,8 @@ class HomeViewModel(
                     )
                 }
                 _videos.postValue(videoModels)
-            }.onFailure { e ->
-                Log.d("데이터 로딩 실패", e.toString())
+            }.onFailure {e ->
+                Log.d("데이터 로딩 실패",e.toString())
             }
         }
     }
@@ -76,9 +69,10 @@ class HomeViewModel(
             runCatching {
                 val response = repository.getVideoInfo(
                     apiKey = RetroClient.API_KEY,
+                    maxResult = 10,
                     categoryId = "20",
                     regionCode = "KR",
-                    maxResult = 10,
+                    pageToken = null
                 )
                 val videoModels = response.items!!.map {
                     HomeVideoModel(
@@ -102,9 +96,10 @@ class HomeViewModel(
             runCatching {
                 val response = repository.getVideoInfo(
                     apiKey = RetroClient.API_KEY,
+                    maxResult = 10,
                     categoryId = "10",
                     regionCode = "KR",
-                    maxResult = 10
+                    pageToken = null
                 )
                 val videoModels = response.items!!.map {
                     HomeVideoModel(
@@ -123,15 +118,15 @@ class HomeViewModel(
         }
     }
 
-
     fun fetchPetVideo() {
         viewModelScope.launch {
             runCatching {
                 val response = repository.getVideoInfo(
                     apiKey = RetroClient.API_KEY,
+                    maxResult = 10,
                     categoryId = "15",
                     regionCode = "KR",
-                    maxResult = 10
+                    pageToken = null
                 )
                 val videoModels = response.items!!.map {
                     HomeVideoModel(
@@ -150,38 +145,40 @@ class HomeViewModel(
         }
     }
 
-    fun fetchSelectVideo(category : String) {
+    fun searchVideos(searchQuery: String) {
         viewModelScope.launch {
             runCatching {
-                val response = repository.getVideoInfo(
+                val response = repository.searchVideo(
                     apiKey = RetroClient.API_KEY,
-                    categoryId = category,
+                    part = "snippet",
+                    type = "video",
+                    maxResult = 10,
                     regionCode = "KR",
-                    maxResult = 20
+                    q = searchQuery
                 )
-                val videoModels = response.items!!.map {
+                Log.d("API Response", response.toString()) // 응답 데이터 로그
+
+                val videoModels = response.items?.map {
                     HomeVideoModel(
                         id = it.id,
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
                         description = it.snippet?.description,
-                        Type = DataType.MOVIE.viewType
+                        Type = DataType.SEARCH_RESULT.viewType
                     )
                 }
-                _selectVideos.postValue(videoModels)
+                _videos.postValue(videoModels ?: emptyList())
             }.onFailure { e ->
-                Log.d("펫 데이터 로딩 실패", e.toString())
+                Log.d("검색 실패", e.toString())
             }
         }
     }
-
-
 }
 
 class HomeViewModelFactory : ViewModelProvider.Factory {
 
-    private val repository = VideoApiServiceImpl(RetroClient.youtubeNetwork)
+    private val repository = VideoApiServiceImpl(videoApiService = RetroClient.youtubeNetwork)
 
     override fun <T : ViewModel> create(
         modelClass: Class<T>,
