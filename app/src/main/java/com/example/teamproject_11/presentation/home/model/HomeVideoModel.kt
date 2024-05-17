@@ -3,7 +3,7 @@ package com.example.teamproject_11.presentation.home.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.teamproject_11.data.remote.model.YouTubeVideo
+import com.example.teamproject_11.data.model.YouTubeVideo
 import kotlinx.parcelize.Parcelize
 
 

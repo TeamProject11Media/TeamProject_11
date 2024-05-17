@@ -1,7 +1,7 @@
-package com.example.teamproject_11.data.remote.remote
+package com.example.teamproject_11.data.remote
 
 
-import com.example.teamproject_11.data.remote.model.YouTubeResponse
+import com.example.teamproject_11.data.model.YouTubeResponse
 import com.example.teamproject_11.network.RetroClient
 import retrofit2.Call
 import retrofit2.http.GET
@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface VideoApiService {
     @GET("videos")
-    fun getVideoInfo(
+    suspend fun getVideoInfo(
         @Query("key") apiKey: String = RetroClient.API_KEY,
         @Query("part") part: String = "snippet",
         @Query("chart") order: String = "mostPopular",
@@ -18,5 +18,5 @@ interface VideoApiService {
         @Query("videoCategoryId") categoryId: String? = null,
         @Query("regionCode") regionCode: String = "KR",
         @Query("channelId") channelId: String? = null
-    ): Call<YouTubeResponse>
+    ): YouTubeResponse
 }

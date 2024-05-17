@@ -1,4 +1,4 @@
-package com.example.teamproject_11.data.room
+package com.example.teamproject_11.room
 
 import androidx.room.Dao
 import androidx.room.Insert

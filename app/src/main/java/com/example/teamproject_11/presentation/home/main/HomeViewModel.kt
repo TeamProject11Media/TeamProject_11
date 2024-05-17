@@ -1,18 +1,28 @@
 package com.example.teamproject_11.presentation.home.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.teamproject_11.network.RetroClient
-import com.example.teamproject_11.data.remote.model.YouTubeResponse
+import com.example.teamproject_11.data.model.YouTubeResponse
+import com.example.teamproject_11.data.remote.VideoApiService
+import com.example.teamproject_11.data.repository.VideoApiServiceImpl
+import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class HomeViewModel() : ViewModel() {
+class HomeViewModel(
+    private val repository: YouTubeRepository
+) : ViewModel() {
 
 
     private val _videos = MutableLiveData<List<HomeVideoModel>>()
@@ -30,139 +40,123 @@ class HomeViewModel() : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val apiService = RetroClient.youtubeNetwork
 
 
-    fun fetchPopularVideos() {
-            val call = apiService.getVideoInfo(
-                order = "mostPopular",
-                regionCode = "KR",
-                maxResult = 10
-            )
-            call.enqueue(object : Callback<YouTubeResponse> {
-                override fun onResponse(
-                    call: Call<YouTubeResponse>,
-                    response: Response<YouTubeResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val videoItems = response.body()?.items ?: emptyList()
-                        val videoModels = videoItems.map { videoItem ->
-                            HomeVideoModel(
-                                id = videoItem.id,
-                                imgThumbnail = videoItem.snippet?.thumbnails?.high?.url,
-                                title = videoItem.snippet?.title,
-                                dateTime = videoItem.snippet?.publishedAt,
-                                description = videoItem.snippet?.description,
-                                Type = DataType.MOST.viewType
-                            )
-                        }
-                        _videos.postValue(videoModels)
-                    } else {
-                        _error.postValue("Error fetching videos")
-                    }
+    fun fetchPopularVideos(){
+        viewModelScope.launch {
+            runCatching {
+                val response = repository.getVideoInfo(
+                    apiKey = RetroClient.API_KEY,
+                    order = "mostPopular",
+                    regionCode = "KR",
+                    maxResult = 10
+                )
+                val videoModels = response.items!!.map {
+                    HomeVideoModel(
+                        id = it.id,
+                        imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                        title = it.snippet?.title,
+                        dateTime = it.snippet?.publishedAt,
+                        description = it.snippet?.description,
+                        Type = DataType.MOST.viewType
+                    )
                 }
-
-                override fun onFailure(call: Call<YouTubeResponse>, t: Throwable) {
-                    _error.postValue("Error: ${t.message}")
-                }
-            })
+                _videos.postValue(videoModels)
+            }.onFailure {e ->
+               Log.d("데이터 로딩 실패",e.toString())
+            }
         }
+    }
 
     fun fetchGameVideo() {
-        val call = apiService.getVideoInfo(
-            categoryId = "20",
-            regionCode = "KR",
-            maxResult = 10
-        )
-        call.enqueue(object : Callback<YouTubeResponse> {
-            override fun onResponse(call: Call<YouTubeResponse>, response: Response<YouTubeResponse>) {
-                if (response.isSuccessful) {
-                    val videoItems = response.body()?.items ?: emptyList()
-                    val videoModels = videoItems.map { videoItem ->
-                        HomeVideoModel(
-                            id = videoItem.id,
-                            imgThumbnail = videoItem.snippet?.thumbnails?.high?.url,
-                            title = videoItem.snippet?.title,
-                            dateTime = videoItem.snippet?.publishedAt,
-                            description = videoItem.snippet?.description,
-                            Type = DataType.GAME.viewType
-                        )
-                    }
-                    _gameVideos.postValue(videoModels)
-                } else {
-                    _error.postValue("Error fetching videos")
+        viewModelScope.launch {
+            runCatching {
+                val response = repository.getVideoInfo(
+                    apiKey = RetroClient.API_KEY,
+                    categoryId = "20",
+                    regionCode = "KR",
+                    maxResult = 10
+                )
+                val videoModels = response.items!!.map {
+                    HomeVideoModel(
+                        id = it.id,
+                        imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                        title = it.snippet?.title,
+                        dateTime = it.snippet?.publishedAt,
+                        description = it.snippet?.description,
+                        Type = DataType.GAME.viewType
+                    )
                 }
+                _gameVideos.postValue(videoModels)
+            }.onFailure { e ->
+                Log.d("게임 데이터 로딩 실패", e.toString())
             }
-            override fun onFailure(call: Call<YouTubeResponse>, t: Throwable) {
-                _error.postValue("Error: ${t.message}")
-            }
-
-        })
+        }
     }
 
     fun fetchMusicVideo() {
-        val call = apiService.getVideoInfo(
-            categoryId = "10",
-            regionCode = "KR",
-            maxResult = 10
-        )
-        call.enqueue(object : Callback<YouTubeResponse> {
-            override fun onResponse(call: Call<YouTubeResponse>, response: Response<YouTubeResponse>) {
-                if (response.isSuccessful) {
-                    val videoItems = response.body()?.items ?: emptyList()
-                    val videoModels = videoItems.map { videoItem ->
-                        HomeVideoModel(
-                            id = videoItem.id,
-                            imgThumbnail = videoItem.snippet?.thumbnails?.high?.url,
-                            title = videoItem.snippet?.title,
-                            dateTime = videoItem.snippet?.publishedAt,
-                            description = videoItem.snippet?.description,
-                            Type = DataType.MUSIC.viewType
-                        )
-                    }
-                    _musicVideos.postValue(videoModels)
-                } else {
-                    _error.postValue("Error fetching videos")
-                }
+    viewModelScope.launch {
+        runCatching {
+            val response = repository.getVideoInfo(
+                apiKey = RetroClient.API_KEY,
+                categoryId = "10",
+                regionCode = "KR",
+                maxResult = 10
+            )
+            val videoModels = response.items!!.map {
+                HomeVideoModel(
+                    id = it.id,
+                    imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                    title = it.snippet?.title,
+                    dateTime = it.snippet?.publishedAt,
+                    description = it.snippet?.description,
+                    Type = DataType.MUSIC.viewType
+                )
             }
-            override fun onFailure(call: Call<YouTubeResponse>, t: Throwable) {
-                _error.postValue("Error: ${t.message}")
-            }
-
-        })
+            _musicVideos.postValue(videoModels)
+        }.onFailure { e ->
+            Log.d("음악 데이터 로딩 실패", e.toString())
+        }
     }
+}
 
-    fun fetchPetVideo() {
-        val call = apiService.getVideoInfo(
-            categoryId = "15",
-            regionCode = "KR",
-            maxResult = 10
-        )
-        call.enqueue(object : Callback<YouTubeResponse> {
-            override fun onResponse(call: Call<YouTubeResponse>, response: Response<YouTubeResponse>) {
-                if (response.isSuccessful) {
-                    val videoItems = response.body()?.items ?: emptyList()
-                    val videoModels = videoItems.map { videoItem ->
-                        HomeVideoModel(
-                            id = videoItem.id,
-                            imgThumbnail = videoItem.snippet?.thumbnails?.high?.url,
-                            title = videoItem.snippet?.title,
-                            dateTime = videoItem.snippet?.publishedAt,
-                            description = videoItem.snippet?.description,
-                            Type = DataType.MOVIE.viewType
-                        )
-                    }
-                    _petVideos.postValue(videoModels)
-                } else {
-                    _error.postValue("Error fetching videos")
-                }
-            }
-            override fun onFailure(call: Call<YouTubeResponse>, t: Throwable) {
-                _error.postValue("Error: ${t.message}")
-            }
 
-        })
+fun fetchPetVideo() {
+    viewModelScope.launch {
+        runCatching {
+            val response = repository.getVideoInfo(
+                apiKey = RetroClient.API_KEY,
+                categoryId = "15",
+                regionCode = "KR",
+                maxResult = 10
+            )
+            val videoModels = response.items!!.map {
+                HomeVideoModel(
+                    id = it.id,
+                    imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                    title = it.snippet?.title,
+                    dateTime = it.snippet?.publishedAt,
+                    description = it.snippet?.description,
+                    Type = DataType.MOVIE.viewType
+                )
+            }
+            _petVideos.postValue(videoModels)
+        }.onFailure { e ->
+            Log.d("펫 데이터 로딩 실패", e.toString())
+        }
     }
+}
 
 
+}
+class HomeViewModelFactory : ViewModelProvider.Factory {
+
+    private val repository = VideoApiServiceImpl(RetroClient.youtubeNetwork)
+
+    override fun <T : ViewModel> create(
+        modelClass: Class<T>,
+        extras: CreationExtras
+    ): T = HomeViewModel(
+        repository
+    ) as T
 }

@@ -5,9 +5,10 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import com.example.teamproject_11.data.room.MyListDataBase
+import com.example.teamproject_11.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityDetailBinding
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +20,7 @@ class DetailActivity : AppCompatActivity() {
         ActivityDetailBinding.inflate(layoutInflater)
     }
     private val viewModel by lazy {
-        ViewModelProvider(this)[DetailViewModel::class.java]
+        ViewModelProvider(this, DetailViewModelFactory())[DetailViewModel::class.java]
     }
     private val data by lazy {
         intent.getParcelableExtra<HomeVideoModel>("ClickItem")
@@ -98,6 +99,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun fetchVideo() {
-        viewModel.fetchPetVideo()
+            viewModel.fetchPetVideo()
     }
 }

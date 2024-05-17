@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.teamproject_11.R
-import com.example.teamproject_11.data.remote.model.YouTubeResponse
+import com.example.teamproject_11.data.model.YouTubeResponse
 
 class SearchAdapter(
     val items: List<YouTubeResponse>,

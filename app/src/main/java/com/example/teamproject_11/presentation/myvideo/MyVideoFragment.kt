@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.teamproject_11.R
-import com.example.teamproject_11.data.room.MyListDataBase
+import com.example.teamproject_11.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
