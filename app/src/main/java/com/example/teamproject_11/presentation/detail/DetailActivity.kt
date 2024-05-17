@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.teamproject_11.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityDetailBinding
@@ -16,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
+    var likedItems: ArrayList<HomeVideoModel> = ArrayList()
+
     private val binding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
@@ -36,6 +39,10 @@ class DetailActivity : AppCompatActivity() {
         settingDate()
 
         initViewModel()
+
+        binding.btnAddList.setOnClickListener {
+            addLikedItem(detailAdapter.itemList[0])
+        }
     }
 
 
@@ -100,5 +107,23 @@ class DetailActivity : AppCompatActivity() {
 
     private fun fetchVideo() {
             viewModel.fetchPetVideo()
+    }
+
+    /**
+     * 좋아요가 눌린 아이템을 likedItems 리스트에 추가하는 함수입니다.
+     * @param item 좋아요가 눌린 아이템
+     */
+    fun addLikedItem(item: HomeVideoModel) {
+        if(!likedItems.contains(item)) {
+            likedItems.add(item)
+        }
+    }
+
+    /**
+     * 좋아요가 취소된 아이템을 likedItems 리스트에서 제거하는 함수입니다.
+     * @param item 좋아요가 취소된 아이템
+     */
+    fun removeLikedItem(item: HomeVideoModel) {
+        likedItems.remove(item)
     }
 }

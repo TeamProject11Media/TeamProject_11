@@ -1,5 +1,6 @@
 package com.example.teamproject_11.presentation.myvideo
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment
 import com.example.teamproject_11.R
 import com.example.teamproject_11.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityMainBinding
+import com.example.teamproject_11.presentation.detail.DetailActivity
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +29,9 @@ class MyVideoFragment : Fragment() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private var param1: String? = null
     private var param2: String? = null
+    private var myVideos: List<HomeVideoModel> = listOf()
+    private lateinit var adapter: MyVideoAdapter
+    private lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +46,12 @@ class MyVideoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        val detailActivity = activity as DetailActivity
+        myVideos = detailActivity.likedItems
+
+        adapter = MyVideoAdapter(mContext).apply {
+            items = myVideos.toMutableList()
+        }
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_video, container, false)
