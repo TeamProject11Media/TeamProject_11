@@ -30,7 +30,7 @@ data class YouTubeVideo(
 // 검색 items 오브젝트 클래스
 
 data class SearchVideoModel(
-    val id: YouTubeVideoSearchId,  // 'String'이 아니라 객체
+    val id: YouTubeVideoSearchId,
     val imgThumbnail: String?,
     val title: String?,
     val dateTime: String?,
