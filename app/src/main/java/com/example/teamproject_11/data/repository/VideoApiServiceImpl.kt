@@ -16,7 +16,10 @@ class VideoApiServiceImpl(
         maxResult: Int,
         categoryId: String?,
         regionCode: String,
-        channelId: String?
-    ) = videoApiService.getVideoInfo(apiKey, part, order, type, maxResult, categoryId, regionCode, channelId).toEntity()
+        channelId: String?,
+        pageToken: String?,
+    ) = videoApiService.getVideoInfo(apiKey, part, order, type, maxResult, categoryId, regionCode, channelId, pageToken).toEntity()
+
+
 
 }

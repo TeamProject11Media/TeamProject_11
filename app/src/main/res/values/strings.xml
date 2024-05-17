@@ -4,6 +4,19 @@
     <string name="search_item">Search for a show, movie, genre, etc.</string>
     <string name="search_title">Oloture</string>
     <string name="search_date">yyyy-mm-dd</string>
+    <string name="pet">Pets &amp; Animals</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="spinner_list">
+        <item>Shorts</item> // 1
+        <item>Entertainment</item> // 24
+        <item>Autos &amp; Vehicles</item> // 2
+        <item>Sports</item> // 17
+        <item>Comedy</item> // 23
+        <item>Howto &amp; Style</item> // 26
+        <item>Technology</item> // 28
+        <item>News</item> //25
+
+    </string-array>
 </resources>

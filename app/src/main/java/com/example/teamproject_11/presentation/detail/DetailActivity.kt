@@ -1,9 +1,13 @@
 package com.example.teamproject_11.presentation.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,18 +41,23 @@ class DetailActivity : AppCompatActivity() {
         settingDesc()
         settingImage()
         settingDate()
-
         initViewModel()
 
         binding.btnAddList.setOnClickListener {
             addLikedItem(detailAdapter.itemList[0])
         }
+        updateToScroll()
     }
 
-
+    //더보기 기능을 onResume에 넣었습니다
+    override fun onResume() {
+        super.onResume()
+        setViewMore(binding.detailSummary, binding.detailSummaryMore)
+    }
 
     private fun initView(){
         val toolBar = binding.detailToolBar
+        binding.detailToolBar.title = ""
         setSupportActionBar(toolBar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         viewModel.getClickData(data!!)
@@ -95,7 +104,7 @@ class DetailActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel.dummyData.observe(this) {
             detailAdapter = DetailAdapter()
-            detailAdapter.itemList = it
+            detailAdapter.itemList = it.toMutableList()
             with(binding.detailRecommandList) {
                 adapter = detailAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -126,4 +135,35 @@ class DetailActivity : AppCompatActivity() {
     fun removeLikedItem(item: HomeVideoModel) {
         likedItems.remove(item)
     }
+
+    //요약에서 더보기 버튼 활성화 관련 메소드
+    private fun setViewMore(contentTextView: TextView, viewMoreTextView: TextView) {
+        contentTextView.post {
+            val lineCount = contentTextView.layout.lineCount
+            if (lineCount > 0) {
+                if (contentTextView.layout.getEllipsisCount(lineCount - 1) > 0) {
+                    viewMoreTextView.visibility = View.VISIBLE
+
+                    viewMoreTextView.setOnClickListener {
+                        contentTextView.maxLines = Int.MAX_VALUE
+                        viewMoreTextView.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateToScroll() {
+        binding.detailRecommandList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(!binding.detailContainer.canScrollVertically(1)){
+                    val listSize = viewModel.dummyData.value!!.size - 1
+                    viewModel.addFetchVideo()
+                    (binding.detailRecommandList.adapter as DetailAdapter).notifyItemRangeChanged(listSize, 20)
+                }
+            }
+        })
+    }
+
 }

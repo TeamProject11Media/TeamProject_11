@@ -17,6 +17,7 @@ interface VideoApiService {
         @Query("maxResults") maxResult: Int,
         @Query("videoCategoryId") categoryId: String? = null,
         @Query("regionCode") regionCode: String = "KR",
-        @Query("channelId") channelId: String? = null
+        @Query("channelId") channelId: String? = null,
+        @Query("pageToken") pageToken: String? = null,
     ): YouTubeResponse
 }

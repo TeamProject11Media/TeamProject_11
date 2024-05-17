@@ -1,5 +1,6 @@
 package com.example.teamproject_11.presentation.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,7 @@ class DetailViewModel(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-
+    private var nextPageToken : String? = null
 
     private val _data : MutableLiveData<HomeVideoModel> = MutableLiveData()
     val data : LiveData<HomeVideoModel> get() = _data
@@ -45,8 +46,10 @@ class DetailViewModel(
                     apiKey = RetroClient.API_KEY,
                     order = "mostPopular",
                     regionCode = "KR",
-                    maxResult = 20
+                    maxResult = 20,
+                    pageToken = null,
                 )
+                nextPageToken = response.nextPageToken
                 val videoModels = response.items!!.map {
                     HomeVideoModel(
                         id = it.id,
@@ -60,6 +63,35 @@ class DetailViewModel(
                 _dummyData.postValue(videoModels)
             }.onFailure {
                 _error.postValue("Error fetching videos")
+            }
+        }
+    }
+    fun addFetchVideo(){
+        viewModelScope.launch {
+            runCatching {
+                val buffer = _dummyData.value!!.toMutableList()
+                val response = repository.getVideoInfo(
+                    apiKey = RetroClient.API_KEY,
+                    order = "mostPopular",
+                    regionCode = "KR",
+                    maxResult = 20,
+                    pageToken = nextPageToken
+                )
+                response.items?.forEach {
+                    val extraData = HomeVideoModel(
+                        id = it.id,
+                        imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                        title = it.snippet?.title,
+                        dateTime = it.snippet?.publishedAt,
+                        description = it.snippet?.description,
+                        Type = DataType.MOST.viewType
+                    )
+                    buffer.add(extraData)
+                }
+                _dummyData.postValue(buffer)
+                Log.d("성공", "데이터 추가 성공")
+            }.onFailure {
+                Log.d("오류", "데이터 추가 실패")
             }
         }
     }

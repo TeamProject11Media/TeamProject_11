@@ -34,7 +34,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Most Popular Videos"
                 android:fontFamily="@font/scbada"
-                android:textSize="33sp"
+                android:textSize="32sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -51,15 +51,13 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_Main_Most"
                 tools:listitem="@layout/item_most" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/tv_Main_Category1"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:text="Category"
-                android:fontFamily="@font/scbada"
-                android:textSize="28sp"
+                android:theme="@style/SpinnerTheme"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_Most" />
@@ -84,7 +82,7 @@
                 android:layout_marginTop="15dp"
                 android:text="Game"
                 android:fontFamily="@font/scbada"
-                android:textSize="28sp"
+                android:textSize="25sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_Category1" />
@@ -110,7 +108,7 @@
                 android:layout_marginTop="15dp"
                 android:text="Music"
                 android:fontFamily="@font/scbada"
-                android:textSize="28sp"
+                android:textSize="25sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_Category2" />
@@ -134,9 +132,9 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:text="Pet"
+                android:text="@string/pet"
                 android:fontFamily="@font/scbada"
-                android:textSize="28sp"
+                android:textSize="25sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_Category3" />

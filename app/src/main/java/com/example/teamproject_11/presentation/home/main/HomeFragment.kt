@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.teamproject_11.R
 import com.example.teamproject_11.databinding.FragmentHomeBinding
 import com.example.teamproject_11.presentation.home.main.adapter.GameViewAdapter
 import com.example.teamproject_11.presentation.home.main.adapter.MostViewAdapter
 import com.example.teamproject_11.presentation.home.main.adapter.MovieViewAdapter
 import com.example.teamproject_11.presentation.home.main.adapter.MusicViewAdapter
+import com.example.teamproject_11.presentation.home.main.adapter.SelectViewAdapter
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -30,10 +33,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var movieViewAdapter: MovieViewAdapter
 
+    private lateinit var selectViewAdapter: SelectViewAdapter
+
     private val viewModel by lazy {
         ViewModelProvider(requireActivity(), HomeViewModelFactory())[HomeViewModel::class.java]
     }
-
 
 
     override fun onCreateView(
@@ -52,16 +56,21 @@ class HomeFragment : Fragment() {
         gameViewAdapter = GameViewAdapter()
         musicViewAdapter = MusicViewAdapter()
         movieViewAdapter = MovieViewAdapter()
+        selectViewAdapter = SelectViewAdapter()
+
+
         initPopularVideo()
         initViewModel()
         initGameVideo()
         initMusicVideo()
         initPetVideo()
+        initSelectVideo()
+
 
     }
 
     private fun initViewModel() {
-        viewModel.video.observe(viewLifecycleOwner) {
+        viewModel.videos.observe(viewLifecycleOwner) {
             mostViewAdapter.itemList = it
             with(binding.rvMost) {
                 adapter = mostViewAdapter
@@ -96,6 +105,15 @@ class HomeFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
         }
+
+        viewModel.selectVideos.observe(viewLifecycleOwner) {
+            selectViewAdapter.itemList = it
+            with(binding.rvCategory1) {
+                adapter = selectViewAdapter
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
+        }
     }
 
     private fun initPopularVideo() {
@@ -104,7 +122,7 @@ class HomeFragment : Fragment() {
                 (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
             }
         })
-        viewModel.video.observe(viewLifecycleOwner) { videoModels ->
+        viewModel.videos.observe(viewLifecycleOwner) { videoModels ->
             mostViewAdapter.setItems(videoModels)
         }
         fetchPopularVideos()
@@ -169,5 +187,52 @@ class HomeFragment : Fragment() {
 
     private fun fetchPetVideos() {
         viewModel.fetchPetVideo()
+    }
+
+    private fun initSelectVideo() {
+        selectViewAdapter.setOnItemClickListener(object : SelectViewAdapter.OnItemClickListener {
+            override fun onItemClick(videoModel: HomeVideoModel) {
+                (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
+            }
+        })
+        CoroutineScope(Dispatchers.Main).launch {
+            fetchSelectVideo()
+        }
+        viewModel.selectVideos.observe(viewLifecycleOwner) { videoModels ->
+            selectViewAdapter.setItem(videoModels)
+        }
+        fetchSelectVideo()
+    }
+
+    private fun fetchSelectVideo() {
+        with(binding.tvMainCategory1) {
+            adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.spinner_list,
+                R.layout.spinner_item
+            )
+            onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        when (position) {
+                            0 -> viewModel.fetchSelectVideo("1")
+                            1 -> viewModel.fetchSelectVideo("24")
+                            2 -> viewModel.fetchSelectVideo("2")
+                            3 -> viewModel.fetchSelectVideo("17")
+                            4 -> viewModel.fetchSelectVideo("23")
+                            5 -> viewModel.fetchSelectVideo("26")
+                            6 -> viewModel.fetchSelectVideo("28")
+                            7 -> viewModel.fetchSelectVideo("25")
+                        }
+                    }
+                }
+        }
     }
 }

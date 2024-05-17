@@ -15,6 +15,7 @@ interface YouTubeRepository {
         maxResult: Int,
         categoryId: String? = null,
         regionCode: String = "KR",
-        channelId: String? = null
+        channelId: String? = null,
+        pageToken: String? = null,
     ): YouTubeResponseEntity
 }
