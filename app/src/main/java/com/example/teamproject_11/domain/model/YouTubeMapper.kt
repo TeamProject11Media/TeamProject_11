@@ -6,7 +6,7 @@ import com.example.teamproject_11.data.model.Snippet
 import com.example.teamproject_11.data.model.Thumbnails
 import com.example.teamproject_11.data.model.YouTubeResponse
 import com.example.teamproject_11.data.model.YouTubeVideo
-import com.google.gson.annotations.SerializedName
+import com.example.teamproject_11.data.model.YouTubeVideoSearchId
 
 fun YouTubeResponse.toEntity() = YouTubeResponseEntity(
     kind = kind,
@@ -29,6 +29,13 @@ fun YouTubeVideo.toEntity() = YouTubeVideoEntity(
     etag = etag,
     id = id,
     snippet = snippet?.toEntity()
+)
+
+fun YouTubeVideoSearchId.toEntity() = YouTubeVideoSearchIdEntity(
+    kind = kind,
+    videoId = videoId,
+    channelId = channelId,
+    playlistId = playlistId
 )
 
 fun Snippet.toEntity() = SnippetEntity(

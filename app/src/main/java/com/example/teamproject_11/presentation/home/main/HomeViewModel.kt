@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.teamproject_11.data.model.SearchVideoModel
+import com.example.teamproject_11.data.model.YouTubeVideoSearchId
 import com.example.teamproject_11.network.RetroClient
 import com.example.teamproject_11.data.repository.VideoApiServiceImpl
 import com.example.teamproject_11.domain.repository.YouTubeRepository
@@ -36,8 +38,7 @@ class HomeViewModel(
     val error: LiveData<String> = _error
 
 
-
-    fun fetchPopularVideos(){
+    fun fetchPopularVideos() {
         viewModelScope.launch {
             runCatching {
                 val response = repository.getVideoInfo(
@@ -58,8 +59,8 @@ class HomeViewModel(
                     )
                 }
                 _videos.postValue(videoModels)
-            }.onFailure {e ->
-                Log.d("데이터 로딩 실패",e.toString())
+            }.onFailure { e ->
+                Log.d("데이터 로딩 실패", e.toString())
             }
         }
     }
@@ -156,19 +157,22 @@ class HomeViewModel(
                     regionCode = "KR",
                     q = searchQuery
                 )
-                Log.d("API Response", response.toString()) // 응답 데이터 로그
-
                 val videoModels = response.items?.map {
-                    HomeVideoModel(
-                        id = it.id,
+                    SearchVideoModel(
+                        id = YouTubeVideoSearchId(
+                            kind = it.id,
+                            videoId = it.id,
+                            channelId = it.id,
+                            playlistId = it.id
+                        ),
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
                         description = it.snippet?.description,
-                        Type = DataType.SEARCH_RESULT.viewType
+                        DataType.SEARCH_RESULT.viewType
                     )
                 }
-                _videos.postValue(videoModels ?: emptyList())
+                _videos.postValue((videoModels ?: emptyList()) as List<HomeVideoModel>?)
             }.onFailure { e ->
                 Log.d("검색 실패", e.toString())
             }

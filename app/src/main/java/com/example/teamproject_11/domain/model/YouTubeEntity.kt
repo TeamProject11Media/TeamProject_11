@@ -1,7 +1,5 @@
 package com.example.teamproject_11.domain.model
 
-import com.google.gson.annotations.SerializedName
-
 
 data class YouTubeResponseEntity (
     val kind : String?,
@@ -12,13 +10,10 @@ data class YouTubeResponseEntity (
     val items : List<YouTubeVideoEntity>?,
 )
 
-
 data class PageEntity(
     val totalResults: Int?,
     val resultsPerPage: Int,
 )
-
-
 
 data class YouTubeVideoEntity(
     val kind: String?,
@@ -27,6 +22,12 @@ data class YouTubeVideoEntity(
     val snippet: SnippetEntity?
 )
 
+data class YouTubeVideoSearchIdEntity(
+    val kind: String?,
+    val videoId: String?,
+    val channelId: String?,
+    val playlistId: String?
+)
 
 data class SnippetEntity(
     val publishedAt: String?, //임시로 Date 타입에서 String으로 바꿨습니다

@@ -37,6 +37,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         searchAdapter = SearchAdapter(emptyList(), object : SearchAdapter.OnItemClickListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onClick(view: View, position: Int) {
                 // 클릭한 비디오를 디테일 액티비티로 전달
 //                val videoModel = searchAdapter.items[position]

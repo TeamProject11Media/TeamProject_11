@@ -27,6 +27,24 @@ data class YouTubeVideo(
     val snippet: Snippet?
 )
 
+// 검색 items 오브젝트 클래스
+
+data class SearchVideoModel(
+    val id: YouTubeVideoSearchId,  // 'String'이 아니라 객체
+    val imgThumbnail: String?,
+    val title: String?,
+    val dateTime: String?,
+    val description: String?,
+    val type: Int
+)
+
+data class YouTubeVideoSearchId(
+    val kind: String?,
+    val videoId: String?,
+    val channelId: String?,
+    val playlistId: String?
+)
+
 //items의 속성 중 snippet에 해당하는 오브젝트 클래스, snippet은 해당 item의 업로드 시간 및 제목, 영상 설명 등의 속성을 가지고 있음
 data class Snippet(
     val publishedAt: String?, //임시로 Date 타입에서 String으로 바꿨습니다
@@ -36,7 +54,7 @@ data class Snippet(
     val thumbnails : Thumbnails?,
     val tags: List<String?>?,
     val categoryId: String?,
-    )
+)
 
 //snippet의 속성 중 썸네일에 해당하는 오브젝트 클래스, 해당 클래스는 Key라는 오브젝트 속성을 가지고 Key에 이미지 url 및 너비 길이 정보가 있음
 
@@ -95,8 +113,3 @@ val dummyData = listOf(
     ),null,"MOVIE")
     ),
 )
-
-
-
-
-
