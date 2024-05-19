@@ -2,6 +2,7 @@ package com.example.teamproject_11.data.remote
 
 
 import com.example.teamproject_11.data.model.YouTubeResponse
+import com.example.teamproject_11.data.model.YouTubeSearchResponse
 import com.example.teamproject_11.network.RetroClient
 import retrofit2.Call
 import retrofit2.http.GET
@@ -28,5 +29,5 @@ interface VideoApiService {
         @Query("maxResults") maxResult: Int,
         @Query("regionCode") regionCode: String = "KR",
         @Query("q") query: String?
-    ): YouTubeResponse
+    ): YouTubeSearchResponse
 }

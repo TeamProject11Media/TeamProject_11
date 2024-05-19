@@ -27,20 +27,6 @@ data class YouTubeVideo(
     val snippet: Snippet?
 )
 
-// 검색 items 오브젝트 클래스
-
-data class YouTubeVideoItem(
-    @SerializedName("id") val id: YouTubeVideoSearchId,
-    @SerializedName("snippet") val snippet: Snippet?
-)
-data class YouTubeVideoSearchId(
-    @SerializedName("kind") val kind: String?,
-    @SerializedName("videoId") val videoId: String?,
-    @SerializedName("channelId") val channelId: String?,
-    @SerializedName("playlistId") val playlistId: String?
-)
-
-
 //items의 속성 중 snippet에 해당하는 오브젝트 클래스, snippet은 해당 item의 업로드 시간 및 제목, 영상 설명 등의 속성을 가지고 있음
 // items의 속성 중 snippet에 해당하는 오브젝트 클래스
 data class Snippet(
@@ -69,6 +55,51 @@ data class Key(
     val width: Int?,
     val height: Int?,
 )
+
+
+
+// 검색 items 오브젝트 클래스
+
+data class YouTubeSearchResponse(
+    @SerializedName("kind") val kind: String?,
+    @SerializedName("etag") val etag: String?,
+    @SerializedName("items") val items: List<YouTubeVideoItem>?
+)
+
+data class YouTubeVideoItem(
+    @SerializedName("id") val id: YouTubeVideoSearchId?,
+    @SerializedName("snippet") val snippet: SearchSnippet?
+)
+
+data class YouTubeVideoSearchId(
+    @SerializedName("kind") val kind: String?,
+    @SerializedName("videoId") val videoId: String?,
+    @SerializedName("channelId") val channelId: String?,
+    @SerializedName("playlistId") val playlistId: String?
+)
+
+data class SearchSnippet(
+    @SerializedName("publishedAt") val publishedAt: String?, // Date 타입을 String으로 변경
+    @SerializedName("channelId") val channelId: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("thumbnails") val thumbnails: SearchThumbnails?,
+    @SerializedName("channelTitle") val channelTitle: String?,
+    @SerializedName("liveBroadcastContent") val liveBroadcastContent: String?
+)
+
+data class SearchThumbnails(
+    @SerializedName("default") val default: Thumbnail?,
+    @SerializedName("medium") val medium: Thumbnail?,
+    @SerializedName("high") val high: Thumbnail?
+)
+
+data class Thumbnail(
+    @SerializedName("url") val url: String?,
+    @SerializedName("width") val width: Int?,
+    @SerializedName("height") val height: Int?
+)
+
 
 //더미 데이터
 

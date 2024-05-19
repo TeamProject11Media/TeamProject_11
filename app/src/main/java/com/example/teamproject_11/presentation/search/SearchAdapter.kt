@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.teamproject_11.R
-import com.example.teamproject_11.data.model.YouTubeResponse
+import com.example.teamproject_11.data.model.YouTubeSearchResponse
 
 class SearchAdapter(
-    val items: List<YouTubeResponse>,
+    var items: List<YouTubeSearchResponse>,
     private var itemClickListener: OnItemClickListener
 ) :
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
@@ -23,12 +23,13 @@ class SearchAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        private val ivThumbnail: ImageView = itemView.findViewById(R.id.ivSearch)
 
-        fun bind(item: YouTubeResponse) {
+        fun bind(item: YouTubeSearchResponse) {
             itemView.apply {
                 Glide.with(context)
                     .load(item.items?.firstOrNull()?.snippet?.thumbnails)
-                    .into(this as ImageView)
+                    .into(ivThumbnail)
 
                 tvTitle.text = item.items?.firstOrNull()?.snippet?.title ?: "No title available"
                 tvDate.text = item.items?.firstOrNull()?.snippet?.publishedAt ?: "No date available"

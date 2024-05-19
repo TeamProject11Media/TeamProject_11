@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-    <!--    <androidx.appcompat.widget.Toolbar-->
-    <!--        android:id="@+id/tb_Main"-->
-    <!--        android:layout_width="85dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_centerHorizontal="true"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:titleTextColor="@color/white" />-->
-
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"

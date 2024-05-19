@@ -25,17 +25,6 @@ data class YouTubeVideoEntity(
     val snippet: SnippetEntity?
 )
 
-@Entity(tableName = "search_videos")
-data class SearchVideoEntity(
-    @PrimaryKey
-    val id: String,
-    val imgThumbnail: String?,
-    val title: String?,
-    val dateTime: String?,
-    val description: String?,
-    val type: Int
-)
-
 data class SnippetEntity(
     val publishedAt: String?, //임시로 Date 타입에서 String으로 바꿨습니다
     val channelId: String?,
@@ -56,4 +45,16 @@ data class KeyEntity(
     val url: String?,
     val width: Int?,
     val height: Int?,
+)
+
+
+@Entity(tableName = "search_videos")
+data class SearchVideoEntity(
+    @PrimaryKey
+    val id: String,
+    val imgThumbnail: String?,
+    val title: String?,
+    val dateTime: String?,
+    val description: String?,
+    val type: Int
 )

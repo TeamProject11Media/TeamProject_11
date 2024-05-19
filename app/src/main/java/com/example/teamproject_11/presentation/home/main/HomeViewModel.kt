@@ -1,8 +1,6 @@
 package com.example.teamproject_11.presentation.home.main
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresExtension
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -165,7 +163,7 @@ class HomeViewModel(
                 )
                 val videoModels = response.items?.map {
                     SearchVideoModel(
-                        id = it.id, // JsonSyntaxException
+                        id = it.id?.videoId ?: "",
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
