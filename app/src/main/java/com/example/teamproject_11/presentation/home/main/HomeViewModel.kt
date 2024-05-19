@@ -1,6 +1,5 @@
 package com.example.teamproject_11.presentation.home.main
 
-import android.net.http.HttpException
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresExtension
@@ -12,13 +11,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.teamproject_11.network.RetroClient
 import com.example.teamproject_11.data.repository.VideoApiServiceImpl
-import com.example.teamproject_11.domain.model.YouTubeVideoEntity
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 import kotlinx.coroutines.launch
 import java.io.IOException
+import retrofit2.HttpException
 
 
 class HomeViewModel(
@@ -153,7 +152,6 @@ class HomeViewModel(
         }
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun searchVideos(searchQuery: String) {
         viewModelScope.launch {
             runCatching {
@@ -172,7 +170,7 @@ class HomeViewModel(
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
                         description = it.snippet?.description,
-                        Type = DataType.MOVIE.viewType
+                        type = DataType.MOVIE.viewType
                     )
                 }
                 _searchVideos.postValue(videoModels)

@@ -9,5 +9,5 @@ data class SearchVideoModel(
     val title: String?,
     val dateTime: String?,
     val description: String?,
-    val Type: Int
+    val type: Int
 )

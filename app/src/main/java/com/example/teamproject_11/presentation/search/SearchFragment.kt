@@ -74,7 +74,6 @@ class SearchFragment : Fragment() {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun performSearch() {
         val searchQuery = binding.etSearch.text.toString()
         viewModel.searchVideos(searchQuery)
