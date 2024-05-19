@@ -1,20 +1,19 @@
 package com.example.teamproject_11.presentation.search
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresExtension
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamproject_11.databinding.FragmentSearchBinding
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
-import com.example.teamproject_11.presentation.home.main.HomeViewModelFactory
-import com.example.teamproject_11.presentation.main.MainActivity
 
 class SearchFragment : Fragment() {
 
@@ -23,7 +22,7 @@ class SearchFragment : Fragment() {
         get() = _binding!!
     private lateinit var searchAdapter: SearchAdapter
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory()
+        HomeViewModel.HomeViewModelFactory()
     }
 
     override fun onCreateView(
@@ -34,6 +33,7 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,6 +55,7 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(context)
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun setUpListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             hideKeyboard()
@@ -73,6 +74,7 @@ class SearchFragment : Fragment() {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun performSearch() {
         val searchQuery = binding.etSearch.text.toString()
         viewModel.searchVideos(searchQuery)

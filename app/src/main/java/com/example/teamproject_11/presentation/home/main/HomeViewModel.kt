@@ -1,6 +1,9 @@
 package com.example.teamproject_11.presentation.home.main
 
+import android.net.http.HttpException
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +18,7 @@ import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 
 class HomeViewModel(
@@ -149,6 +153,7 @@ class HomeViewModel(
         }
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun searchVideos(searchQuery: String) {
         viewModelScope.launch {
             runCatching {
@@ -160,9 +165,9 @@ class HomeViewModel(
                     regionCode = "KR",
                     q = searchQuery
                 )
-                val videoModels = response.items!!.map {
+                val videoModels = response.items?.map {
                     SearchVideoModel(
-                        id = it.id, // gson.JsonSyntaxException
+                        id = it.id, // JsonSyntaxException
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
@@ -172,20 +177,38 @@ class HomeViewModel(
                 }
                 _searchVideos.postValue(videoModels)
             }.onFailure { e ->
-                Log.d("검색 실패", e.toString())
+                when (e) {
+                    is HttpException -> {
+                        val exception = null
+                        when (exception?.code) {
+                            403 -> Log.d("검색 실패", "API 호출 제한 초과: ${e.message}")
+                            404 -> Log.d("검색 실패", "리소스를 찾을 수 없음: ${e.message}")
+                            else -> Log.d("검색 실패", "HTTP 오류 발생: ${e.message}")
+                        }
+                    }
+
+                    is IOException -> {
+                        Log.d("검색 실패", "네트워크 오류: ${e.message}")
+                    }
+
+                    else -> {
+                        Log.d("검색 실패", "기타 오류: ${e.message}")
+                    }
+                }
             }
         }
     }
-}
 
-class HomeViewModelFactory : ViewModelProvider.Factory {
 
-    private val repository = VideoApiServiceImpl(videoApiService = RetroClient.youtubeNetwork)
+    class HomeViewModelFactory : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(
-        modelClass: Class<T>,
-        extras: CreationExtras
-    ): T = HomeViewModel(
-        repository
-    ) as T
+        private val repository = VideoApiServiceImpl(videoApiService = RetroClient.youtubeNetwork)
+
+        override fun <T : ViewModel> create(
+            modelClass: Class<T>,
+            extras: CreationExtras
+        ): T = HomeViewModel(
+            repository
+        ) as T
+    }
 }
