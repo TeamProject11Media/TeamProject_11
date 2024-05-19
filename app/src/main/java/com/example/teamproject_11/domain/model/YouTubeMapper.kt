@@ -6,7 +6,9 @@ import com.example.teamproject_11.data.model.Snippet
 import com.example.teamproject_11.data.model.Thumbnails
 import com.example.teamproject_11.data.model.YouTubeResponse
 import com.example.teamproject_11.data.model.YouTubeVideo
+import com.example.teamproject_11.data.model.YouTubeVideoItem
 import com.example.teamproject_11.data.model.YouTubeVideoSearchId
+import com.example.teamproject_11.presentation.main.DataType
 
 fun YouTubeResponse.toEntity() = YouTubeResponseEntity(
     kind = kind,
@@ -31,12 +33,20 @@ fun YouTubeVideo.toEntity() = YouTubeVideoEntity(
     snippet = snippet?.toEntity()
 )
 
-fun YouTubeVideoSearchId.toEntity() = YouTubeVideoSearchIdEntity(
-    kind = kind,
-    videoId = videoId,
-    channelId = channelId,
-    playlistId = playlistId
-)
+fun YouTubeVideoItem.toEntity(): SearchVideoEntity {
+    return SearchVideoEntity(
+        id = id.videoId ?: "",
+        imgThumbnail = snippet?.thumbnails?.high?.url,
+        title = snippet?.title,
+        dateTime = snippet?.publishedAt,
+        description = snippet?.description,
+        type = DataType.SEARCH_RESULT.viewType
+    )
+}
+fun List<YouTubeVideoItem>.toEntityList(): List<SearchVideoEntity> {
+    return this.map { it.toEntity() }
+}
+
 
 fun Snippet.toEntity() = SnippetEntity(
     publishedAt = publishedAt,
@@ -50,7 +60,7 @@ fun Snippet.toEntity() = SnippetEntity(
 
 fun Thumbnails.toEntity() = ThumbnailsEntity(
     default = default.toEntity(),
-    medium =  medium.toEntity(),
+    medium = medium.toEntity(),
     high = high.toEntity()
 )
 
@@ -59,4 +69,3 @@ fun Key.toEntity() = KeyEntity(
     width = width,
     height = height,
 )
-

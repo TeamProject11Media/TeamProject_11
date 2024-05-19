@@ -18,11 +18,11 @@ interface YouTubeRepository {
     ): YouTubeResponseEntity
 
     suspend fun searchVideo(
-        apiKey: String,
-        part: String,
-        type: String,
+        apiKey: String = RetroClient.API_KEY,
+        part: String = "snippet",
+        type: String = "video",
         maxResult: Int,
-        regionCode: String,
+        regionCode: String = "KR",
         q: String?
     ): YouTubeResponseEntity
 }

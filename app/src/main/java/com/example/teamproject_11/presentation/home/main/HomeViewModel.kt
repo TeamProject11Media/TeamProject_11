@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.teamproject_11.data.model.SearchVideoModel
-import com.example.teamproject_11.data.model.YouTubeVideoSearchId
 import com.example.teamproject_11.network.RetroClient
 import com.example.teamproject_11.data.repository.VideoApiServiceImpl
+import com.example.teamproject_11.domain.model.YouTubeVideoEntity
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
+import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 import kotlinx.coroutines.launch
 
 
@@ -22,8 +22,8 @@ class HomeViewModel(
 ) : ViewModel() {
 
 
-    private val _videos = MutableLiveData<List<HomeVideoModel>>()
-    val video: LiveData<List<HomeVideoModel>> = _videos
+    private val _videos = MutableLiveData<List<HomeVideoModel>?>()
+    val video: LiveData<List<HomeVideoModel>?> = _videos
 
     private val _gameVideos = MutableLiveData<List<HomeVideoModel>>()
     val gameVideo: LiveData<List<HomeVideoModel>> = _gameVideos
@@ -36,6 +36,9 @@ class HomeViewModel(
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
+
+    private val _searchVideos = MutableLiveData<List<SearchVideoModel>?>()
+    val searchVideo: LiveData<List<SearchVideoModel>?> = _searchVideos
 
 
     fun fetchPopularVideos() {
@@ -157,22 +160,17 @@ class HomeViewModel(
                     regionCode = "KR",
                     q = searchQuery
                 )
-                val videoModels = response.items?.map {
+                val videoModels = response.items!!.map {
                     SearchVideoModel(
-                        id = YouTubeVideoSearchId(
-                            kind = it.id,
-                            videoId = it.id,
-                            channelId = it.id,
-                            playlistId = it.id
-                        ),
+                        id = it.id, // gson.JsonSyntaxException
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
                         description = it.snippet?.description,
-                        DataType.SEARCH_RESULT.viewType
+                        Type = DataType.MOVIE.viewType
                     )
                 }
-                _videos.postValue((videoModels ?: emptyList()) as List<HomeVideoModel>?)
+                _searchVideos.postValue(videoModels)
             }.onFailure { e ->
                 Log.d("검색 실패", e.toString())
             }
