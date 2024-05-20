@@ -6,39 +6,45 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.datastore.preferences.protobuf.LazyStringArrayList
 import androidx.fragment.app.Fragment
-import com.example.teamproject_11.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.teamproject_11.room.MyListDataBase
-import com.example.teamproject_11.databinding.ActivityMainBinding
+import com.example.teamproject_11.databinding.FragmentMyVideoBinding
 import com.example.teamproject_11.presentation.detail.DetailActivity
+import com.example.teamproject_11.presentation.detail.DetailViewModel
+import com.example.teamproject_11.presentation.detail.DetailViewModelFactory
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.reflect.Array
 
 /**
  * A simple [Fragment] subclass.
  * Use the [MyVideoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+private const val ARG_PARAM = "param"
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 class MyVideoFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var binding: FragmentMyVideoBinding? = null
     private var myVideos: List<HomeVideoModel> = listOf()
     private lateinit var adapter: MyVideoAdapter
     private lateinit var mContext: Context
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -46,40 +52,29 @@ class MyVideoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val detailActivity = activity as DetailActivity
-        myVideos = detailActivity.likedItems
+        val detailActivity = DetailActivity()
+//        myVideos = viewModel.likedItems
+//
+//        Log.d("MyVideoFragment myVideos 확인", "$myVideos")
+//        Log.d("MyVideoFragment likedItems 확인", "${viewModel.likedItems}")
 
         adapter = MyVideoAdapter(mContext).apply {
             items = myVideos.toMutableList()
         }
 
+        binding = FragmentMyVideoBinding.inflate(inflater, container, false).apply {
+            myVideoRecycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            myVideoRecycler.adapter = adapter
+
+        }
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_video, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyVideoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyVideoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
 
@@ -88,8 +83,8 @@ class MyVideoFragment : Fragment() {
         // room에 저장되어있는 내 비디오 리스트 불러오기
         val listDao = MyListDataBase.getMyListDataBase(requireActivity()).getMyListDAO()
         CoroutineScope(Dispatchers.IO).launch {
-            val list = listDao.getMyListData()
-            Log.d("룸 데이터 확인", list.toString())
+            myVideos = listDao.getMyListData()
+            Log.d("룸 데이터 확인", myVideos.toString())
         }
     }
 }
