@@ -9,7 +9,7 @@ import com.example.teamproject_11.databinding.ItemSearchBinding
 import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 
 class SearchAdapter(
-    private var items: List<SearchVideoModel>,
+    var items: List<SearchVideoModel>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
@@ -17,7 +17,10 @@ class SearchAdapter(
         fun onClick(view: View, position: Int)
     }
 
-    inner class ViewHolder(private val binding: ItemSearchBinding) :
+    class ViewHolder(
+        private val binding: ItemSearchBinding,
+        private val itemClickListener: OnItemClickListener?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(items: SearchVideoModel) {
             binding.apply {
@@ -31,7 +34,7 @@ class SearchAdapter(
                 root.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
-                        itemClickListener.onClick(it, position)
+                        itemClickListener?.onClick(it, position)
                     }
                 }
             }
@@ -40,7 +43,7 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
