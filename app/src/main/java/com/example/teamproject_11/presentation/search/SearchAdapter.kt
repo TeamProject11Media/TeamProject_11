@@ -22,7 +22,7 @@ class SearchAdapter(
         fun bind(items: SearchVideoModel) {
             binding.apply {
                 Glide.with(root.context)
-                    .load(items)
+                    .load(items.imgThumbnail)
                     .into(ivSearch)
 
                 tvTitle.text = items.title ?: "No title available"
@@ -49,7 +49,8 @@ class SearchAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun updateItems() {
+    fun updateItems(data: List<SearchVideoModel>) {
+        this.items = data
         notifyDataSetChanged()
     }
 }

@@ -3,6 +3,7 @@ package com.example.teamproject_11.presentation.search
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
+        Log.d("SearchFragment", "setRecyclerView called")
         binding.recyclerViewSearch.apply {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(context)
@@ -82,9 +84,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.video.observe(viewLifecycleOwner) { videoList ->
-            videoList?.let {
-                searchAdapter.updateItems()
+        viewModel.searchVideo.observe(viewLifecycleOwner) { searchVideo ->
+            if (searchVideo != null) {
+                searchAdapter.updateItems(data = searchVideo)
             }
         }
     }

@@ -12,7 +12,6 @@ object RetroClient {
     private const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
     const val API_KEY = "AIzaSyAKuVzpNIYVx4lqYFXmSSt-gwvxz6jbupg"
 
-
     private fun createOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
 
@@ -35,7 +34,6 @@ object RetroClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(createOkHttpClient())
             .build()
-
 
     val youtubeNetwork: VideoApiService =
         youtubeRetrofit.create(VideoApiService::class.java)
