@@ -47,7 +47,6 @@ data class KeyEntity(
     val height: Int?,
 )
 
-
 @Entity(tableName = "search_videos")
 data class SearchVideoEntity(
     @PrimaryKey

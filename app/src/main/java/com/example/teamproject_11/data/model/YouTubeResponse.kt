@@ -3,13 +3,13 @@ package com.example.teamproject_11.data.model
 import com.google.gson.annotations.SerializedName
 
 //유튜브 API 데이터 전송 형태
-data class YouTubeResponse (
-    @SerializedName("kind") val kind : String?,
-    @SerializedName("etag") val etag : String?,
-    @SerializedName("nextPageToken") val nextPageToken : String?,
-    @SerializedName("prevPageToken") val prevPageToken : String?,
-    @SerializedName("pageInfo") val pageInfo : Page?,
-    @SerializedName("items") val items : List<YouTubeVideo>?,
+data class YouTubeResponse(
+    @SerializedName("kind") val kind: String?,
+    @SerializedName("etag") val etag: String?,
+    @SerializedName("nextPageToken") val nextPageToken: String?,
+    @SerializedName("prevPageToken") val prevPageToken: String?,
+    @SerializedName("pageInfo") val pageInfo: Page?,
+    @SerializedName("items") val items: List<YouTubeVideo>?,
 )
 
 //유튜브 전송 데이터 속성 중 PageInfo 오브젝트 클래스
@@ -51,11 +51,10 @@ data class Thumbnails(
 )
 
 data class Key(
-    val url : String?,
+    val url: String?,
     val width: Int?,
     val height: Int?,
 )
-
 
 
 // 검색 items 오브젝트 클래스
@@ -79,7 +78,7 @@ data class YouTubeVideoSearchId(
 )
 
 data class SearchSnippet(
-    @SerializedName("publishedAt") val publishedAt: String?, // Date 타입을 String으로 변경
+    @SerializedName("publishedAt") val publishedAt: String?,
     @SerializedName("channelId") val channelId: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,

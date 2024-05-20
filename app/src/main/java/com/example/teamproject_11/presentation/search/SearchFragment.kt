@@ -51,8 +51,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        binding.recyclerViewSearch.adapter = searchAdapter
-        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewSearch.apply {
+            adapter = searchAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
@@ -80,9 +82,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.video.observe(viewLifecycleOwner) {
-            searchAdapter.items
-            searchAdapter.notifyDataSetChanged()
+        viewModel.video.observe(viewLifecycleOwner) { videoList ->
+            videoList?.let {
+                searchAdapter.updateItems()
+            }
         }
     }
 

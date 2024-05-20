@@ -157,7 +157,7 @@ class HomeViewModel(
                     apiKey = RetroClient.API_KEY,
                     part = "snippet",
                     type = "video",
-                    maxResult = 10,
+                    maxResult = 8, // 임시로 최대 8개 설정
                     regionCode = "KR",
                     q = searchQuery
                 )
@@ -170,7 +170,7 @@ class HomeViewModel(
                         description = it.snippet?.description,
                         type = DataType.MOVIE.viewType
                     )
-                }
+                } ?: emptyList()
                 _searchVideos.postValue(videoModels)
             }.onFailure { e ->
                 when (e) {
@@ -194,7 +194,6 @@ class HomeViewModel(
             }
         }
     }
-
 
     class HomeViewModelFactory : ViewModelProvider.Factory {
 

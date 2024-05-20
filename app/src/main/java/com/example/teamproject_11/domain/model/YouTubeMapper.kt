@@ -7,7 +7,6 @@ import com.example.teamproject_11.data.model.Thumbnails
 import com.example.teamproject_11.data.model.YouTubeResponse
 import com.example.teamproject_11.data.model.YouTubeVideo
 import com.example.teamproject_11.data.model.YouTubeVideoItem
-import com.example.teamproject_11.data.model.YouTubeVideoSearchId
 import com.example.teamproject_11.presentation.main.DataType
 
 fun YouTubeResponse.toEntity() = YouTubeResponseEntity(

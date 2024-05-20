@@ -1,7 +1,6 @@
 package com.example.teamproject_11.domain.repository
 
 import com.example.teamproject_11.data.model.YouTubeSearchResponse
-import com.example.teamproject_11.domain.model.SearchVideoEntity
 import com.example.teamproject_11.domain.model.YouTubeResponseEntity
 import com.example.teamproject_11.network.RetroClient
 

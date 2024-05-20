@@ -1,9 +1,6 @@
 package com.example.teamproject_11.data.repository
 
-import com.example.teamproject_11.data.model.YouTubeSearchResponse
 import com.example.teamproject_11.data.remote.VideoApiService
-import com.example.teamproject_11.domain.model.SearchVideoEntity
-import com.example.teamproject_11.domain.model.YouTubeResponseEntity
 import com.example.teamproject_11.domain.model.toEntity
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 

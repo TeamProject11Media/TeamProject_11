@@ -3,38 +3,32 @@ package com.example.teamproject_11.presentation.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.teamproject_11.R
-import com.example.teamproject_11.data.model.YouTubeSearchResponse
+import com.example.teamproject_11.databinding.ItemSearchBinding
+import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 
 class SearchAdapter(
-    var items: List<YouTubeSearchResponse>,
-    private var itemClickListener: OnItemClickListener
-) :
-    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+    private var items: List<SearchVideoModel>,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onClick(view: View, position: Int)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
-        private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
-        private val ivThumbnail: ImageView = itemView.findViewById(R.id.ivSearch)
+    inner class ViewHolder(private val binding: ItemSearchBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(items: SearchVideoModel) {
+            binding.apply {
+                Glide.with(root.context)
+                    .load(items)
+                    .into(ivSearch)
 
-        fun bind(item: YouTubeSearchResponse) {
-            itemView.apply {
-                Glide.with(context)
-                    .load(item.items?.firstOrNull()?.snippet?.thumbnails)
-                    .into(ivThumbnail)
+                tvTitle.text = items.title ?: "No title available"
+                tvDate.text = items.dateTime ?: "No date available"
 
-                tvTitle.text = item.items?.firstOrNull()?.snippet?.title ?: "No title available"
-                tvDate.text = item.items?.firstOrNull()?.snippet?.publishedAt ?: "No date available"
-
-                setOnClickListener {
+                root.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         itemClickListener.onClick(it, position)
@@ -45,15 +39,17 @@ class SearchAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
-        return ViewHolder(view)
+        val binding = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int {
-        return items.size
+    override fun getItemCount(): Int = items.size
+
+    fun updateItems() {
+        notifyDataSetChanged()
     }
 }
