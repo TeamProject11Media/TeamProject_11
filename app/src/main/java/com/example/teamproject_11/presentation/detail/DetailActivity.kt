@@ -1,12 +1,14 @@
 package com.example.teamproject_11.presentation.detail
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +23,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DetailActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -33,6 +37,7 @@ class DetailActivity : AppCompatActivity() {
         intent.getParcelableExtra<HomeVideoModel>("ClickItem")
     }
     private lateinit var detailAdapter: DetailAdapter
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -90,9 +95,12 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun settingDate() {
         viewModel.data.observe(this) {
-            binding.detailDate.text = it.dateTime
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            val date = LocalDateTime.parse(it.dateTime, formatter)
+            binding.detailDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         }
     }
 

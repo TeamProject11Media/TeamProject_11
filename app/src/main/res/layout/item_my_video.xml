@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/myvideo_container"
     android:padding="10dp">
 
     <ImageView
@@ -22,11 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:maxLines="2"
         android:text="동영상 제목"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        android:textColor="@color/white"
-        android:gravity="center"/>
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/tvVideoDate"
@@ -36,6 +36,5 @@
         android:text="동영상 업로드 날짜"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvVideoName"
-        android:gravity="center"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvVideoName"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

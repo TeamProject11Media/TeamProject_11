@@ -1,12 +1,16 @@
 package com.example.teamproject_11.presentation.search
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.teamproject_11.databinding.ItemSearchBinding
 import com.example.teamproject_11.presentation.home.model.SearchVideoModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class SearchAdapter(
     var items: List<SearchVideoModel>,
@@ -22,6 +26,7 @@ class SearchAdapter(
         private val itemClickListener: OnItemClickListener?
     ) :
         RecyclerView.ViewHolder(binding.root) {
+        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(items: SearchVideoModel) {
             binding.apply {
                 Glide.with(root.context)
@@ -29,7 +34,11 @@ class SearchAdapter(
                     .into(ivSearch)
 
                 tvTitle.text = items.title ?: "No title available"
-                tvDate.text = items.dateTime ?: "No date available"
+
+                //날짜 형식 깔끔하게 바꾸기
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                val date = LocalDateTime.parse(items.dateTime, formatter)
+                tvDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) ?: "No date available"
 
                 root.setOnClickListener {
                     val position = adapterPosition

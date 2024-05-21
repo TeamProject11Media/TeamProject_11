@@ -47,6 +47,6 @@ class MyVideoFragment : Fragment() {
                 }
             })
         }
-        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
+        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
     }
 }
