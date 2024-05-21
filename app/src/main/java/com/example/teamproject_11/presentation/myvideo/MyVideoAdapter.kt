@@ -1,14 +1,18 @@
 package com.example.teamproject_11.presentation.myvideo
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
+import android.text.style.BackgroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.teamproject_11.databinding.ItemMyVideoBinding
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
-import com.example.teamproject_11.presentation.search.SearchAdapter
 
 
 interface OnItemClick{
@@ -16,10 +20,7 @@ interface OnItemClick{
     fun onItemClickToDelete(item: HomeVideoModel)
 }
 class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItemClick: OnItemClick) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-
     inner class MyVideoViewHolder(private val binding: ItemMyVideoBinding) : RecyclerView.ViewHolder(binding.root) {
-        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(item: HomeVideoModel){
             binding.imageView.load(item.imgThumbnail) {
                 crossfade(true)
@@ -35,11 +36,18 @@ class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItem
 
             binding.tvVideoName.text = item.title
             binding.myVideoContainer.setOnClickListener {
-                if(fragmentMode == 0)
-                onItemClick.onItemClick(item)
+                if(fragmentMode == 0){
+                    onItemClick.onItemClick(item)
+                }
                 else {
-                    binding.myVideoContainer.setBackgroundColor(Color.rgb(255,0,0))
                     onItemClick.onItemClickToDelete(item)
+                    val color = (binding.myVideoContainer.background as ColorDrawable).color
+                    Log.d("확인","컬러 $color, 파란색 ${Color.BLUE}")
+                    if (color == Color.BLUE) {
+                        binding.myVideoContainer.setBackgroundColor(Color.TRANSPARENT)
+                    } else {
+                        binding.myVideoContainer.setBackgroundColor(Color.BLUE)
+                    }
                 }
             }
         }
@@ -54,7 +62,6 @@ class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItem
         return data.size
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as MyVideoViewHolder
         holder.bind(data[position])
