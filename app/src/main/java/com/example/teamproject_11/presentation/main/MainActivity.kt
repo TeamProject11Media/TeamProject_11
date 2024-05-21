@@ -3,13 +3,18 @@ package com.example.teamproject_11.presentation.main
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.teamproject_11.R
 import com.example.teamproject_11.databinding.ActivityMainBinding
 import com.example.teamproject_11.presentation.detail.DetailActivity
+import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
+import com.example.teamproject_11.presentation.myvideo.fragmentMode
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -17,11 +22,14 @@ class MainActivity : AppCompatActivity() {
     var likedItems: ArrayList<HomeVideoModel> = ArrayList()
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModel.HomeViewModelFactory()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-
+        initText()
         initViewPager()
         initToolBar()
 
@@ -106,5 +114,15 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("ClickItem", videoModel)
         startActivity(intent)
 
+    }
+
+    //여기에다가 사용하실 아이콘 등록해서 넣어주세요!
+    private fun initText(){
+        binding.ivTbMain.setOnLongClickListener {
+            Log.d("모드 전환", "모드 전환")
+            fragmentMode = 1
+            viewModel.myvideoModeObserve()
+            true
+        }
     }
 }

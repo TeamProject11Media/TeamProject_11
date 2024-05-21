@@ -1,5 +1,9 @@
 package com.example.teamproject_11.presentation.myvideo
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.util.Log
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +18,7 @@ import com.example.teamproject_11.presentation.main.MainActivity
 import com.google.android.material.snackbar.Snackbar
 
 
+val deleteList = mutableListOf<HomeVideoModel>()
 var fragmentMode : Int = 0
 class MyVideoFragment : Fragment() {
     private val binding by lazy { FragmentMyVideoBinding.inflate(layoutInflater) }
@@ -38,6 +43,7 @@ class MyVideoFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getMyVideoList(requireActivity())
+        setBtnDelete()
     }
 
     private fun initView() {
@@ -49,18 +55,39 @@ class MyVideoFragment : Fragment() {
                 }
 
                 override fun onItemClickToDelete(item: HomeVideoModel) {
-                    viewModel.deleteMyVideoItem(requireActivity(), item)
+                    deleteList.add(item)
                 }
             })
         }
-        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
-        binding.btnMyPageDelete.setOnClickListener {
-            if(fragmentMode == 0){
-                fragmentMode = 1
+        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
+
+
+        binding.btnDelete.setOnClickListener {
+            val alert = AlertDialog.Builder(this@MyVideoFragment.context)
+            val size = deleteList.size
+            alert
+                .setTitle("삭제")
+                .setMessage("${size}개의 동영상을 리스트에서 삭제하시겠습니까?")
+                .setPositiveButton("YES"
+                ) { dialog, which -> deleteList.forEach{item ->
+                    viewModel.deleteMyVideoItem(requireActivity(), item)
+                }
+                                    fragmentMode = 0
+                                    viewModel.myvideoModeObserve()
+                                    deleteList.clear()
+                                    binding.btnDelete.visibility = View.GONE
+                                    }
+                .setNegativeButton("NO"){dialog, which ->}.create().show()
+        }
+    }
+    private fun setBtnDelete(){
+        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner){
+            if(it == 0){
+                binding.btnDelete.visibility = View.GONE
             }
-            else {
-                fragmentMode = 0
-            }
+            else
+                binding.btnDelete.visibility = View.VISIBLE
         }
     }
 }
+

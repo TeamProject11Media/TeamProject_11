@@ -14,6 +14,7 @@ import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.home.model.SearchVideoModel
+import com.example.teamproject_11.presentation.myvideo.fragmentMode
 import com.example.teamproject_11.room.MyListDataBase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +54,9 @@ class HomeViewModel(
 
 
     var nextPageToken: String? = null
+
+    private val _myVideoFragmentMode = MutableLiveData<Int>()
+    val myVideoFragmentMode : LiveData<Int> get() = _myVideoFragmentMode
     fun fetchPopularVideos() {
         viewModelScope.launch {
             runCatching {
@@ -200,12 +204,11 @@ class HomeViewModel(
             }
         }
     }
-    fun deleteMyVideoItem(activity : Activity, item: HomeVideoModel){
+    fun deleteMyVideoItem(activity : Activity, data :HomeVideoModel){
         val listDao = MyListDataBase.getMyListDataBase(activity).getMyListDAO()
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
-                listDao.deleteData(item)
-                Log.d("데이터 삭제 성공", myVideoList.toString())
+                listDao.deleteData(data)
                 val list = listDao.getMyListData()
                 _myVideoList.postValue(list)
             }.onFailure {e ->
@@ -308,6 +311,10 @@ class HomeViewModel(
                 }
             }
         }
+    }
+
+    fun myvideoModeObserve(){
+        _myVideoFragmentMode.postValue(fragmentMode)
     }
 
     class HomeViewModelFactory : ViewModelProvider.Factory {
