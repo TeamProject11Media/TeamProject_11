@@ -22,16 +22,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Home"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:textSize="38dp"
-            android:fontFamily="@font/scbada"
+            android:fontFamily="@font/snow"
             android:textColor="@color/white"
             android:layout_gravity="center"/>
 
         <ImageView
             android:id="@+id/iv_Tb_Main"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:background="@drawable/share_main"
             android:layout_gravity="end"
             android:layout_marginEnd="15dp" />

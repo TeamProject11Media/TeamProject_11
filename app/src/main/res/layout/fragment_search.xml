@@ -6,26 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_Main"
-        android:layout_width="85dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="Home"
-        app:titleTextColor="@color/white" />
-
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
+        android:paddingStart="5dp"
         android:layout_height="45dp"
-        android:layout_below="@id/tb_Main"
         android:layout_marginStart="11dp"
+        android:layout_marginTop="11dp"
         android:layout_marginEnd="11dp"
         android:autofillHints=""
-        android:background="#A9A9A9"
+        android:background="#D6D6D6"
         android:drawableStart="@drawable/search_off"
         android:hint="@string/search_item"
         android:imeOptions="actionSearch"
@@ -40,7 +30,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/etSearch"
         android:padding="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_search" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </RelativeLayout>

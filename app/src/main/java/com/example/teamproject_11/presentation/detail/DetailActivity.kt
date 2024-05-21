@@ -1,5 +1,6 @@
 package com.example.teamproject_11.presentation.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,16 +17,12 @@ import coil.load
 import com.example.teamproject_11.room.MyListDataBase
 import com.example.teamproject_11.databinding.ActivityDetailBinding
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
-import com.example.teamproject_11.room.MyListDAO
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
-
-    lateinit var myListDAO: MyListDAO
-    val likedItems = mutableListOf<HomeVideoModel>()
-
     private val binding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
@@ -41,18 +37,13 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initView()
-//        initRoom()
+        initRoom()
         settingDesc()
         settingImage()
         settingDate()
         initViewModel()
-        myListDAO = MyListDataBase.getMyListDataBase(this).getMyListDAO()
-
-        //MyVideo 추가 버튼
-        binding.btnAddList.setOnClickListener {
-            myVideosAdd()
-        }
         updateToScroll()
+        shareButton()
     }
 
     //더보기 기능을 onResume에 넣었습니다
@@ -60,6 +51,7 @@ class DetailActivity : AppCompatActivity() {
         super.onResume()
         setViewMore(binding.detailSummary, binding.detailSummaryMore)
     }
+
 
     private fun initView() {
         val toolBar = binding.detailToolBar
@@ -77,13 +69,18 @@ class DetailActivity : AppCompatActivity() {
                 runCatching {
                     listDao.insertData(data!!)
                 }.onSuccess {
-                    Toast.makeText(this@DetailActivity, "내 리스트에 추가되었습니다.", Toast.LENGTH_SHORT)
+                    Log.d("데이터 추가 완료", "success")
+                    Snackbar.make(binding.btnAddList, "내 리스트에 추가되었습니다.", Snackbar.LENGTH_SHORT)
                         .show()
                 }
-                    .onFailure {
+                    .onFailure { e ->
+                        Snackbar.make(
+                            binding.btnAddList,
+                            "이미 리스트에 있는 동영상입니다.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
             }
-
         }
     }
 
@@ -102,21 +99,6 @@ class DetailActivity : AppCompatActivity() {
     private fun settingDesc() {
         viewModel.data.observe(this) {
             binding.detailSummary.text = it.description
-        }
-    }
-
-    private fun myVideosAdd() {
-        viewModel.data.observe(this) {
-            if (!likedItems.contains(it)) {
-                likedItems.add(it)
-
-
-                Log.d("뷰모델 리스트 확인", "${likedItems}")
-                CoroutineScope(Dispatchers.IO).launch {
-                    myListDAO.insertData(it)
-                    Log.d("room데이터 확인", "${myListDAO}")
-                }
-            }
         }
     }
 
@@ -144,19 +126,6 @@ class DetailActivity : AppCompatActivity() {
     private fun fetchVideo() {
         viewModel.fetchPetVideo()
     }
-
-
-    //마이 비디오 리스트 추가
-//    fun addLikedItem(item: HomeVideoModel) {
-//        if (!likedItems.contains(item)) {
-//            likedItems.add(item)
-//            Log.d("아이템 확인", "$item")
-//        }
-//    }
-
-//    fun removeLikedItem(item: HomeVideoModel) {
-//        likedItems.remove(item)
-//    }
 
     //요약에서 더보기 버튼 활성화 관련 메소드
     private fun setViewMore(contentTextView: TextView, viewMoreTextView: TextView) {
@@ -191,4 +160,24 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
+    private fun shareButton() {
+        viewModel.data.observe(this) {
+            val title = it.title
+            val image = it.imgThumbnail
+            val description = it.description
+            val time = it.dateTime
+            binding.btnShare.setOnClickListener {
+                val share = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "동영상을 공유합니다!" +
+                            "\n\n${title}" +
+                            "\n\n${image}" +
+                            "\n\n${description}" +
+                            "\n\n${time}")
+                    type = "text/plain"
+                }
+                startActivity(Intent.createChooser(share, null))
+            }
+        }
+    }
 }

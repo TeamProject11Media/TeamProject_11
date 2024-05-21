@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.teamproject_11.R
 import com.example.teamproject_11.databinding.ActivityMainBinding
-import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.detail.DetailActivity
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -17,9 +17,6 @@ class MainActivity : AppCompatActivity() {
     var likedItems: ArrayList<HomeVideoModel> = ArrayList()
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
-    private val detailActivity = DetailActivity()
-    private val bundle = Bundle()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    tab.text = "My Video"
+                    tab.text = "My Videos"
                     tab.setIcon(R.drawable.video)
                 }
             }
@@ -78,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         1 -> {
-                            tvTbTitle.text = "Video List"
+                            tvTbTitle.text = "Search"
                         }
 
                         2 -> {
@@ -88,19 +85,26 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             ivTbMain.setOnClickListener {
-                var snackbar = Snackbar.make(constLayout, "공유 버튼 실행", Snackbar.LENGTH_SHORT)
-                snackbar.setActionTextColor(Color.WHITE)
-                snackbar.setAction("닫기") {
-                    snackbar.dismiss()
+                val share = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "앱을 공유합니다!" +
+                                "\n\n링크: https://play.google.com/store/app/details?id=com.example.teamproject_11" +
+                                "\n\nGitHub: https://github.com/TeamProject11Media/TeamProject_Media"
+                    )
+                    type = "text/plain"
                 }
-                snackbar.show()
+                startActivity(Intent.createChooser(share, null))
             }
         }
     }
+
 
     fun openVideoDetailFromHome(videoModel: HomeVideoModel) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("ClickItem", videoModel)
         startActivity(intent)
+
     }
 }

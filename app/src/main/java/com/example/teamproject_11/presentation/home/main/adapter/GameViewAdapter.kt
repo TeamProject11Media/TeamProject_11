@@ -20,21 +20,26 @@ class GameViewAdapter : RecyclerView.Adapter<GameViewAdapter.MyViewHolder>() {
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-    inner class MyViewHolder (private val binding: ItemCategoryBinding) :
+
+    inner class MyViewHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
-            binding.ivCategory.load(item.imgThumbnail) {
-                crossfade(true)
-            }
+            with(binding.ivCategory) {
+                load(item.imgThumbnail) {
+                    crossfade(true)
+                }
+                clipToOutline = true
 
-            itemView.setOnClickListener {
-                listener?.onItemClick(item)
+                itemView.setOnClickListener {
+                    listener?.onItemClick(item)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 

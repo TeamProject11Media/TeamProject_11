@@ -22,7 +22,7 @@ class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItem
             binding.imageView.clipToOutline = true
             binding.tvVideoDate.text = item.dateTime
             binding.tvVideoName.text = item.title
-            binding.myVideoContainer.setOnClickListener {
+            binding.myvideoContainer.setOnClickListener {
                 onItemClick.onItemClick(item)
             }
         }
