@@ -1,7 +1,6 @@
 package com.example.teamproject_11.presentation.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teamproject_11.databinding.FragmentSearchBinding
-import com.example.teamproject_11.presentation.detail.DetailActivity
-import com.example.teamproject_11.presentation.detail.DetailAdapter
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
@@ -66,6 +63,7 @@ class SearchFragment : Fragment() {
         super.onResume()
         observeViewModel()
     }
+
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun setUpListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
@@ -90,19 +88,6 @@ class SearchFragment : Fragment() {
         viewModel.searchVideos(searchQuery)
     }
 
-    private fun observeViewModel() {
-        viewModel.searchVideo.observe(viewLifecycleOwner) { searchVideo ->
-            if (searchVideo != null) {
-                searchAdapter.setItem(searchVideo)
-                (binding.recyclerViewSearch.adapter as SearchAdapter).notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
     private fun updateToScroll() {
         binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -117,5 +102,19 @@ class SearchFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun observeViewModel() {
+        viewModel.searchVideo.observe(viewLifecycleOwner) { searchVideo ->
+            if (searchVideo != null) {
+                searchAdapter.setItem(searchVideo)
+                (binding.recyclerViewSearch.adapter as SearchAdapter).notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
