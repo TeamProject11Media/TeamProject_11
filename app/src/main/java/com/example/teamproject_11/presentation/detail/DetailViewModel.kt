@@ -77,6 +77,7 @@ class DetailViewModel(
                     maxResult = 20,
                     pageToken = nextPageToken
                 )
+                nextPageToken = response.nextPageToken
                 response.items?.forEach {
                     val extraData = HomeVideoModel(
                         id = it.id,

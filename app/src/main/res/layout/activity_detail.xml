@@ -21,8 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Detail"
-            android:textSize="35dp"
-            android:fontFamily="@font/scbada"
+            android:textSize="38dp"
+            android:textStyle="normal"
+            android:fontFamily="@@font/snow"
             android:textColor="@color/white"
             android:layout_gravity="center"/>
 

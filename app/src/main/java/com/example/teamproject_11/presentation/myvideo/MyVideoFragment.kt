@@ -11,8 +11,10 @@ import com.example.teamproject_11.databinding.FragmentMyVideoBinding
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 
+var fragmentMode : Int = 0
 class MyVideoFragment : Fragment() {
     private val binding by lazy { FragmentMyVideoBinding.inflate(layoutInflater) }
     private val viewModel by lazy {
@@ -45,8 +47,20 @@ class MyVideoFragment : Fragment() {
                 override fun onItemClick(item: HomeVideoModel) {
                     (requireActivity() as MainActivity).openVideoDetailFromHome(item)
                 }
+
+                override fun onItemClickToDelete(item: HomeVideoModel) {
+                    viewModel.deleteMyVideoItem(requireActivity(), item)
+                }
             })
         }
         binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
+        binding.btnMyPageDelete.setOnClickListener {
+            if(fragmentMode == 0){
+                fragmentMode = 1
+            }
+            else {
+                fragmentMode = 0
+            }
+        }
     }
 }

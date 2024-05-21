@@ -98,9 +98,10 @@ class DetailActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun settingDate() {
         viewModel.data.observe(this) {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-            val date = LocalDateTime.parse(it.dateTime, formatter)
-            binding.detailDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+//            val date = LocalDateTime.parse(it.dateTime, formatter)
+//            binding.detailDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            binding.detailDate.text = showDate(it.dateTime!!)
         }
     }
 
@@ -187,5 +188,9 @@ class DetailActivity : AppCompatActivity() {
                 startActivity(Intent.createChooser(share, null))
             }
         }
+    }
+    private fun showDate(date: String) : String{
+        val str = date.substring(0,10)
+        return str
     }
 }

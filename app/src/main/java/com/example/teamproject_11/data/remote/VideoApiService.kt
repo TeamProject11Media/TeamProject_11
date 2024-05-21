@@ -26,6 +26,7 @@ interface VideoApiService {
         @Query("type") type: String = "video",
         @Query("maxResults") maxResult: Int,
         @Query("regionCode") regionCode: String = "KR",
-        @Query("q") query: String?
+        @Query("q") query: String?,
+        @Query("pageToken") pageToken: String?
     ): YouTubeSearchResponse
 }

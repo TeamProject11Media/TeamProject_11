@@ -62,7 +62,8 @@ data class Key(
 data class YouTubeSearchResponse(
     @SerializedName("kind") val kind: String?,
     @SerializedName("etag") val etag: String?,
-    @SerializedName("items") val items: List<YouTubeVideoItem>?
+    @SerializedName("items") val items: List<YouTubeVideoItem>?,
+    @SerializedName("nextPageToken") val nextPageToken: String?,
 )
 
 data class YouTubeVideoItem(

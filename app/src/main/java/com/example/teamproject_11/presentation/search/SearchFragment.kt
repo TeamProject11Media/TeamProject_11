@@ -1,6 +1,7 @@
 package com.example.teamproject_11.presentation.search
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +13,12 @@ import androidx.annotation.RequiresExtension
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.teamproject_11.databinding.FragmentSearchBinding
+import com.example.teamproject_11.presentation.detail.DetailActivity
+import com.example.teamproject_11.presentation.detail.DetailAdapter
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
+import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
 
 class SearchFragment : Fragment() {
@@ -38,16 +43,15 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchAdapter = SearchAdapter(emptyList(), object : SearchAdapter.OnItemClickListener {
-            override fun onClick(view: View, position: Int) {
-                // 클릭한 비디오를 디테일 액티비티로 전달
-                val videoModel = searchAdapter.items[position]
-//                (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
+        searchAdapter = SearchAdapter(object : SearchAdapter.OnItemClickListener {
+            override fun onClick(data: HomeVideoModel) {
+                (requireActivity() as MainActivity).openVideoDetailFromHome(data)
             }
         })
 
         setRecyclerView()
         setUpListener()
+        updateToScroll()
         observeViewModel()
     }
 
@@ -58,6 +62,10 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeViewModel()
+    }
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun setUpListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
@@ -85,7 +93,8 @@ class SearchFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.searchVideo.observe(viewLifecycleOwner) { searchVideo ->
             if (searchVideo != null) {
-                searchAdapter.updateItems(data = searchVideo)
+                searchAdapter.setItem(searchVideo)
+                (binding.recyclerViewSearch.adapter as SearchAdapter).notifyDataSetChanged()
             }
         }
     }
@@ -93,5 +102,20 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun updateToScroll() {
+        binding.recyclerViewSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.searchRecyclerContainer.canScrollVertically(1)) {
+                    val listSize = viewModel.searchVideo.value!!.size - 1
+                    viewModel.extraSearchVideos(binding.etSearch.text.toString())
+                    (binding.recyclerViewSearch.adapter as SearchAdapter).notifyItemRangeChanged(
+                        listSize,
+                        8
+                    )
+                }
+            }
+        })
     }
 }

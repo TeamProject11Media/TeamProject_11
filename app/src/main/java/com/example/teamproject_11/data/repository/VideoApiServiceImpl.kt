@@ -1,5 +1,6 @@
 package com.example.teamproject_11.data.repository
 
+import com.example.teamproject_11.data.model.YouTubeSearchResponse
 import com.example.teamproject_11.data.remote.VideoApiService
 import com.example.teamproject_11.domain.model.toEntity
 import com.example.teamproject_11.domain.repository.YouTubeRepository
@@ -25,6 +26,7 @@ class VideoApiServiceImpl(
         type: String,
         maxResult: Int,
         regionCode: String,
-        q: String?
-    ) = videoApiService.searchVideo(apiKey, part, type, maxResult, regionCode, q)
+        q: String?,
+        pageToken: String?
+    ): YouTubeSearchResponse = videoApiService.searchVideo(apiKey, part, type, maxResult, regionCode, q, pageToken)
 }

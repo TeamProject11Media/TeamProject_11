@@ -48,10 +48,11 @@ class HomeViewModel(
     private val _myVideoList = MutableLiveData<List<HomeVideoModel>>()
     val myVideoList: LiveData<List<HomeVideoModel>> get() = _myVideoList
 
-    private val _searchVideos = MutableLiveData<List<SearchVideoModel>?>()
-    val searchVideo: LiveData<List<SearchVideoModel>?> = _searchVideos
+    private val _searchVideos = MutableLiveData<List<HomeVideoModel>?>()
+    val searchVideo: LiveData<List<HomeVideoModel>?> = _searchVideos
 
 
+    var nextPageToken: String? = null
     fun fetchPopularVideos() {
         viewModelScope.launch {
             runCatching {
@@ -199,6 +200,19 @@ class HomeViewModel(
             }
         }
     }
+    fun deleteMyVideoItem(activity : Activity, item: HomeVideoModel){
+        val listDao = MyListDataBase.getMyListDataBase(activity).getMyListDAO()
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching {
+                listDao.deleteData(item)
+                Log.d("데이터 삭제 성공", myVideoList.toString())
+                val list = listDao.getMyListData()
+                _myVideoList.postValue(list)
+            }.onFailure {e ->
+                Log.d("데이터 삭제 실패", e.toString())
+            }
+        }
+    }
 
 
     fun searchVideos(searchQuery: String) {
@@ -210,19 +224,69 @@ class HomeViewModel(
                     type = "video",
                     maxResult = 8, // 임시로 최대 8개 설정
                     regionCode = "KR",
-                    q = searchQuery
+                    q = searchQuery,
+                    pageToken = null
                 )
+                nextPageToken = response.nextPageToken
                 val videoModels = response.items?.map {
-                    SearchVideoModel(
+                    HomeVideoModel(
                         id = it.id?.videoId ?: "",
                         imgThumbnail = it.snippet?.thumbnails?.high?.url,
                         title = it.snippet?.title,
                         dateTime = it.snippet?.publishedAt,
                         description = it.snippet?.description,
-                        type = DataType.MOVIE.viewType
+                        Type = DataType.MOVIE.viewType
                     )
                 } ?: emptyList()
                 _searchVideos.postValue(videoModels)
+            }.onFailure { e ->
+                when (e) {
+                    is HttpException -> {
+                        val exception = null
+                        when (exception?.code) {
+                            403 -> Log.d("검색 실패", "API 호출 제한 초과: ${e.message}")
+                            404 -> Log.d("검색 실패", "리소스를 찾을 수 없음: ${e.message}")
+                            else -> Log.d("검색 실패", "HTTP 오류 발생: ${e.message}")
+                        }
+                    }
+
+                    is IOException -> {
+                        Log.d("검색 실패", "네트워크 오류: ${e.message}")
+                    }
+
+                    else -> {
+                        Log.d("검색 실패", "기타 오류: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+    fun extraSearchVideos(searchQuery: String) {
+        viewModelScope.launch {
+            runCatching {
+                var buffer = _searchVideos.value!!.toMutableList()
+                val response = repository.searchVideo(
+                    apiKey = RetroClient.API_KEY,
+                    part = "snippet",
+                    type = "video",
+                    maxResult = 8, // 임시로 최대 8개 설정
+                    regionCode = "KR",
+                    q = searchQuery,
+                    pageToken = nextPageToken
+                )
+                nextPageToken = response.nextPageToken
+                response.items?.forEach {
+                    val data = HomeVideoModel(
+                        id = it.id?.videoId ?: "",
+                        imgThumbnail = it.snippet?.thumbnails?.high?.url,
+                        title = it.snippet?.title,
+                        dateTime = it.snippet?.publishedAt,
+                        description = it.snippet?.description,
+                        Type = DataType.MOVIE.viewType
+                    )
+                    buffer.add(data)
+                }
+                _searchVideos.postValue(buffer)
             }.onFailure { e ->
                 when (e) {
                     is HttpException -> {

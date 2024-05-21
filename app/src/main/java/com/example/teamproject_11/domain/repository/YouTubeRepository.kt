@@ -24,6 +24,7 @@ interface YouTubeRepository {
         type: String = "video",
         maxResult: Int,
         regionCode: String = "KR",
-        q: String?
+        q: String?,
+        pageToken: String?
     ): YouTubeSearchResponse
 }
