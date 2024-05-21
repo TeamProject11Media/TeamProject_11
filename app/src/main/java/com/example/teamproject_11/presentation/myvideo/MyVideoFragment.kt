@@ -1,10 +1,8 @@
 package com.example.teamproject_11.presentation.myvideo
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
-import android.os.Bundle
 import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +13,6 @@ import com.example.teamproject_11.databinding.FragmentMyVideoBinding
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
-
 
 val deleteList = mutableListOf<HomeVideoModel>()
 var fragmentMode : Int = 0
@@ -46,6 +42,12 @@ class MyVideoFragment : Fragment() {
         setBtnDelete()
     }
 
+    override fun onPause() {
+        super.onPause()
+        deleteList.clear()
+    }
+
+
     private fun initView() {
         viewModel.getMyVideoList(requireActivity())
         viewModel.myVideoList.observe(viewLifecycleOwner){
@@ -55,11 +57,15 @@ class MyVideoFragment : Fragment() {
                 }
 
                 override fun onItemClickToDelete(item: HomeVideoModel) {
-                    deleteList.add(item)
+                    if (!deleteList.contains(item)){
+                        deleteList.add(item)
+                    }else deleteList.remove(item)
+
+                    Log.d("확인", deleteList.toString())
                 }
             })
         }
-        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
+        binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
 
 
         binding.btnDelete.setOnClickListener {

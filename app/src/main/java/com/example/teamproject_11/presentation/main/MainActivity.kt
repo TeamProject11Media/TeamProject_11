@@ -1,13 +1,12 @@
 package com.example.teamproject_11.presentation.main
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.teamproject_11.R
 import com.example.teamproject_11.databinding.ActivityMainBinding
@@ -15,7 +14,6 @@ import com.example.teamproject_11.presentation.detail.DetailActivity
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.myvideo.fragmentMode
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: HomeViewModel by viewModels {
         HomeViewModel.HomeViewModelFactory()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -79,14 +78,18 @@ class MainActivity : AppCompatActivity() {
                     when (position) {
                         0 -> {
                             tvTbTitle.text = "Home"
+                            tvTbDelete.visibility = View.INVISIBLE
                         }
 
                         1 -> {
                             tvTbTitle.text = "Search"
+                            tvTbDelete.visibility = View.INVISIBLE
+
                         }
 
                         2 -> {
                             tvTbTitle.text = "My Videos"
+                            tvTbDelete.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -112,16 +115,13 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("ClickItem", videoModel)
         startActivity(intent)
-
     }
 
-    //여기에다가 사용하실 아이콘 등록해서 넣어주세요!
-    private fun initText(){
-        binding.ivTbMain.setOnLongClickListener {
+    private fun initText() {
+        binding.tvTbDelete.setOnClickListener {
             Log.d("모드 전환", "모드 전환")
             fragmentMode = 1
             viewModel.myvideoModeObserve()
-            true
         }
     }
 }

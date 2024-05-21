@@ -1,8 +1,10 @@
 package com.example.teamproject_11.presentation.search
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.teamproject_11.databinding.ItemProgressBinding
@@ -11,7 +13,6 @@ import com.example.teamproject_11.presentation.detail.DetailAdapter
 import com.example.teamproject_11.presentation.detail.ITEM
 import com.example.teamproject_11.presentation.detail.PROGRESS
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
-import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 import com.example.teamproject_11.presentation.main.DataType
 
 
@@ -38,10 +39,10 @@ class SearchAdapter(
                     .into(ivSearch)
 
                 tvTitle.text = items.title ?: "No title available"
-                tvDate.text = items.dateTime ?: "No date available"
+                binding.tvDate.text = showDate(items.dateTime!!)
 
                 root.setOnClickListener {
-                   itemClickListener?.onClick(items)
+                    itemClickListener?.onClick(items)
                 }
             }
         }
@@ -77,11 +78,14 @@ class SearchAdapter(
 
     override fun getItemCount(): Int = itemList.size
 
-
-
     fun setItem(data: List<HomeVideoModel>) {
         this.itemList = data.toMutableList()
         this.itemList.add(HomeVideoModel("Progress", null,null,null, null, DataType.MOST.viewType))
 //        notifyDataSetChanged()
     }
+}
+
+private fun showDate(date: String) : String{
+    val str = date.substring(0,10)
+    return str
 }
