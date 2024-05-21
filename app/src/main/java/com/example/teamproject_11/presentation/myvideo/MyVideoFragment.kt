@@ -1,8 +1,6 @@
 package com.example.teamproject_11.presentation.myvideo
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.util.Log
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +13,6 @@ import com.example.teamproject_11.databinding.FragmentMyVideoBinding
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
-
 
 val deleteList = mutableListOf<HomeVideoModel>()
 var fragmentMode : Int = 0

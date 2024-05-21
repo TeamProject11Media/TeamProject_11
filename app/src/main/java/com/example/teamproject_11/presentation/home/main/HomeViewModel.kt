@@ -13,7 +13,6 @@ import com.example.teamproject_11.data.repository.VideoApiServiceImpl
 import com.example.teamproject_11.domain.repository.YouTubeRepository
 import com.example.teamproject_11.presentation.main.DataType
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
-import com.example.teamproject_11.presentation.home.model.SearchVideoModel
 import com.example.teamproject_11.presentation.myvideo.fragmentMode
 import com.example.teamproject_11.room.MyListDataBase
 import kotlinx.coroutines.CoroutineScope
