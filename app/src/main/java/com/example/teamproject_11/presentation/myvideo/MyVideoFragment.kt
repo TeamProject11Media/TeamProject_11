@@ -45,6 +45,8 @@ class MyVideoFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         deleteList.clear()
+        fragmentMode = 0
+        viewModel.myvideoModeObserve()
     }
 
 
