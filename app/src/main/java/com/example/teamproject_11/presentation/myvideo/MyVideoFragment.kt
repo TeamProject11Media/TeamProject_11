@@ -34,13 +34,7 @@ class MyVideoFragment : Fragment() {
     private var binding: FragmentMyVideoBinding? = null
     private var myVideos: List<HomeVideoModel> = listOf()
     private lateinit var adapter: MyVideoAdapter
-    private lateinit var mContext: Context
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +52,6 @@ class MyVideoFragment : Fragment() {
 //        Log.d("MyVideoFragment myVideos 확인", "$myVideos")
 //        Log.d("MyVideoFragment likedItems 확인", "${viewModel.likedItems}")
 
-        adapter = MyVideoAdapter(mContext).apply {
-            items = myVideos.toMutableList()
-        }
 
         binding = FragmentMyVideoBinding.inflate(inflater, container, false).apply {
             myVideoRecycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
