@@ -17,6 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/tv_Tb_delete"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/delete" />
+
         <TextView
             android:id="@+id/tv_Tb_Title"
             android:layout_width="wrap_content"

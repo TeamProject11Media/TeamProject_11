@@ -1,5 +1,6 @@
 package com.example.teamproject_11.presentation.search
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,6 @@ import com.example.teamproject_11.presentation.detail.DetailAdapter
 import com.example.teamproject_11.presentation.detail.ITEM
 import com.example.teamproject_11.presentation.detail.PROGRESS
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
-import com.example.teamproject_11.presentation.home.model.SearchVideoModel
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import com.example.teamproject_11.presentation.main.DataType
 
 
@@ -34,7 +32,6 @@ class SearchAdapter(
         private val itemClickListener: OnItemClickListener?
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(items: HomeVideoModel) {
             binding.apply {
                 Glide.with(root.context)
@@ -42,12 +39,7 @@ class SearchAdapter(
                     .into(ivSearch)
 
                 tvTitle.text = items.title ?: "No title available"
-
-                //날짜 형식 깔끔하게 바꾸기
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                val date = LocalDateTime.parse(items.dateTime, formatter)
-                tvDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                    ?: "No date available"
+                binding.tvDate.text = showDate(items.dateTime!!)
 
                 root.setOnClickListener {
                     itemClickListener?.onClick(items)
@@ -86,11 +78,14 @@ class SearchAdapter(
 
     override fun getItemCount(): Int = itemList.size
 
-
-
     fun setItem(data: List<HomeVideoModel>) {
         this.itemList = data.toMutableList()
         this.itemList.add(HomeVideoModel("Progress", null,null,null, null, DataType.MOST.viewType))
 //        notifyDataSetChanged()
     }
+}
+
+private fun showDate(date: String) : String{
+    val str = date.substring(0,10)
+    return str
 }

@@ -61,6 +61,7 @@ class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItem
         return data.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as MyVideoViewHolder
         holder.bind(data[position])
