@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object RetroClient {
     private const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
-    const val API_KEY = "AIzaSyBzwoQdjhCHKYC5pnURObLflUF4Tt3H9WM"
+    const val API_KEY = "AIzaSyBWiOhDNnfVZtZEWiRHfi1lIKojnQmCJME"
 
 
     private fun createOkHttpClient(): OkHttpClient {
