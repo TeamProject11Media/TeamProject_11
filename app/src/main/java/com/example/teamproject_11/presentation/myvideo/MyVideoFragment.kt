@@ -1,5 +1,6 @@
 package com.example.teamproject_11.presentation.myvideo
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.util.Log
 import android.os.Bundle
@@ -14,12 +15,19 @@ import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
 
-val deleteList = mutableListOf<HomeVideoModel>()
-var fragmentMode : Int = 0
+object delete {
+    val deleteList = mutableListOf<HomeVideoModel>()
+}
+
+var fragmentMode: Int = 0
+
 class MyVideoFragment : Fragment() {
     private val binding by lazy { FragmentMyVideoBinding.inflate(layoutInflater) }
     private val viewModel by lazy {
-        ViewModelProvider(requireActivity(), HomeViewModel.HomeViewModelFactory())[HomeViewModel::class.java]
+        ViewModelProvider(
+            requireActivity(),
+            HomeViewModel.HomeViewModelFactory()
+        )[HomeViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -32,6 +40,7 @@ class MyVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initColor()
     }
 
 
@@ -44,7 +53,7 @@ class MyVideoFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        deleteList.clear()
+        delete.deleteList.clear()
         fragmentMode = 0
         viewModel.myvideoModeObserve()
     }
@@ -52,18 +61,18 @@ class MyVideoFragment : Fragment() {
 
     private fun initView() {
         viewModel.getMyVideoList(requireActivity())
-        viewModel.myVideoList.observe(viewLifecycleOwner){
-            binding.myvideoRecyclerview.adapter = MyVideoAdapter(it, object : OnItemClick{
+        viewModel.myVideoList.observe(viewLifecycleOwner) {
+            binding.myvideoRecyclerview.adapter = MyVideoAdapter(it, object : OnItemClick {
                 override fun onItemClick(item: HomeVideoModel) {
                     (requireActivity() as MainActivity).openVideoDetailFromHome(item)
                 }
 
                 override fun onItemClickToDelete(item: HomeVideoModel) {
-                    if (!deleteList.contains(item)){
-                        deleteList.add(item)
-                    }else deleteList.remove(item)
+                    if (!delete.deleteList.contains(item)) {
+                        delete.deleteList.add(item)
+                    } else delete.deleteList.remove(item)
 
-                    Log.d("확인", deleteList.toString())
+                    Log.d("확인", delete.deleteList.toString())
                 }
             })
         }
@@ -72,29 +81,38 @@ class MyVideoFragment : Fragment() {
 
         binding.btnDelete.setOnClickListener {
             val alert = AlertDialog.Builder(this@MyVideoFragment.context)
-            val size = deleteList.size
+            val size = delete.deleteList.size
             alert
                 .setTitle("삭제")
                 .setMessage("${size}개의 동영상을 리스트에서 삭제하시겠습니까?")
-                .setPositiveButton("YES"
-                ) { dialog, which -> deleteList.forEach{item ->
-                    viewModel.deleteMyVideoItem(requireActivity(), item)
+                .setPositiveButton(
+                    "YES"
+                ) { dialog, which ->
+                    delete.deleteList.forEach { item ->
+                        viewModel.deleteMyVideoItem(requireActivity(), item)
+                    }
+                    fragmentMode = 0
+                    viewModel.myvideoModeObserve()
+                    delete.deleteList.clear()
+                    binding.btnDelete.visibility = View.GONE
                 }
-                                    fragmentMode = 0
-                                    viewModel.myvideoModeObserve()
-                                    deleteList.clear()
-                                    binding.btnDelete.visibility = View.GONE
-                                    }
-                .setNegativeButton("NO"){dialog, which ->}.create().show()
+                .setNegativeButton("NO") { dialog, which -> }.create().show()
         }
     }
-    private fun setBtnDelete(){
-        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner){
-            if(it == 0){
+
+    private fun setBtnDelete() {
+        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner) {
+            if (it == 0) {
                 binding.btnDelete.visibility = View.GONE
-            }
-            else
+            } else
                 binding.btnDelete.visibility = View.VISIBLE
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun initColor(){
+        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner){
+            if (it==0) (binding.myvideoRecyclerview.adapter as MyVideoAdapter).notifyDataSetChanged()
         }
     }
 }
