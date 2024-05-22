@@ -21,7 +21,9 @@ class MusicViewAdapter : RecyclerView.Adapter<MusicViewAdapter.MyViewHolder>() {
         this.listener = listener
     }
 
-    inner class MyViewHolder(private val binding: ItemCategoryBinding) :
+    class MyViewHolder(
+        private val binding: ItemCategoryBinding,
+        private val onClick: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
             with(binding.ivCategory) {
@@ -31,7 +33,7 @@ class MusicViewAdapter : RecyclerView.Adapter<MusicViewAdapter.MyViewHolder>() {
                 clipToOutline = true
 
                 itemView.setOnClickListener {
-                    listener?.onItemClick(item)
+                    onClick.onItemClick(item)
                 }
             }
         }
@@ -40,7 +42,7 @@ class MusicViewAdapter : RecyclerView.Adapter<MusicViewAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
+        return MyViewHolder(binding, listener!!)
     }
 
     override fun getItemCount(): Int {

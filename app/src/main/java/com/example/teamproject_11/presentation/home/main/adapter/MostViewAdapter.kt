@@ -21,7 +21,9 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-    inner class MyViewHolder(private val binding: ItemMostBinding) :
+    class MyViewHolder(
+        private val binding: ItemMostBinding,
+        private val onClick: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
             binding.ivMost.load(item.imgThumbnail) {
@@ -30,7 +32,7 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
             binding.ivMost.clipToOutline = true
 
             itemView.setOnClickListener {
-                listener?.onItemClick(item)
+                onClick.onItemClick(item)
             }
         }
     }
@@ -39,11 +41,11 @@ class MostViewAdapter : RecyclerView.Adapter<MostViewAdapter.MyViewHolder>() {
         val dataType = DataType.entries.find { it.viewType == viewType }
         return when(dataType){
             DataType.MOST ->{val binding = ItemMostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return MyViewHolder(binding)
+                return MyViewHolder(binding, listener!!)
             }
             else -> {
                 val binding = ItemMostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return MyViewHolder(binding)
+                return MyViewHolder(binding, listener!!)
             }
         }
     }

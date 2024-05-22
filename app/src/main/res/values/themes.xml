@@ -7,5 +7,7 @@
 
     <style name="Theme.TeamProject_11" parent="Base.Theme.TeamProject_11">
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 </resources>
