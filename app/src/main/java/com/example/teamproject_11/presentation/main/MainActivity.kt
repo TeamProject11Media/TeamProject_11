@@ -13,6 +13,7 @@ import com.example.teamproject_11.databinding.ActivityMainBinding
 import com.example.teamproject_11.presentation.detail.DetailActivity
 import com.example.teamproject_11.presentation.home.main.HomeViewModel
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
+import com.example.teamproject_11.presentation.myvideo.delete
 import com.example.teamproject_11.presentation.myvideo.fragmentMode
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -119,9 +120,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun initText() {
         binding.tvTbDelete.setOnClickListener {
-            Log.d("모드 전환", "모드 전환")
-            fragmentMode = 1
-            viewModel.myvideoModeObserve()
+            if(fragmentMode == 0){
+                Log.d("모드 전환", "모드 전환")
+                fragmentMode = 1
+                viewModel.myvideoModeObserve()
+            } else{
+                fragmentMode = 0
+                viewModel.myvideoModeObserve()
+                delete.deleteList.clear()
+            }
         }
     }
 }

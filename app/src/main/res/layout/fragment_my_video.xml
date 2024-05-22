@@ -26,16 +26,17 @@
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rv_item_radius2"
         android:fontFamily="@font/snow"
+        android:padding="5dp"
         android:text="Delete"
         android:textColor="@color/white"
         android:textSize="38dp"
         android:textStyle="normal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

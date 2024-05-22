@@ -15,15 +15,19 @@ interface OnItemClick{
     fun onItemClick(item: HomeVideoModel)
     fun onItemClickToDelete(item: HomeVideoModel)
 }
+
+
+
 class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItemClick: OnItemClick) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class MyVideoViewHolder(private val binding: ItemMyVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: HomeVideoModel){
             binding.imageView.load(item.imgThumbnail) {
                 crossfade(true)
             }
             binding.imageView.clipToOutline = true
             binding.tvVideoDate.text = showDate(item.dateTime!!)
-
+            binding.myVideoContainer.setBackgroundColor(Color.TRANSPARENT)
             //String -> date타입으로 바꾸고 포맷형식 바꾸기
 //            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
 //            val date = LocalDateTime.parse(item.dateTime, formatter)
@@ -36,9 +40,9 @@ class MyVideoAdapter(private val data : List<HomeVideoModel>, private val onItem
                     onItemClick.onItemClick(item)
                 }
                 else {
+                    //삭제 아이템 누를때 마다 배경색 변경
                     onItemClick.onItemClickToDelete(item)
                     val color = (binding.myVideoContainer.background as ColorDrawable).color
-                    Log.d("확인","컬러 $color, 파란색 ${Color.BLUE}")
                     if (color == Color.BLUE) {
                         binding.myVideoContainer.setBackgroundColor(Color.TRANSPARENT)
                     } else {
@@ -69,3 +73,4 @@ private fun showDate(date: String) : String{
     val str = date.substring(0,10)
     return str
 }
+
