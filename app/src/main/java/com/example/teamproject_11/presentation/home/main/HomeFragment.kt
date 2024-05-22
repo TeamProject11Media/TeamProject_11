@@ -133,9 +133,6 @@ class HomeFragment : Fragment() {
                 (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
             }
         })
-        CoroutineScope(Dispatchers.Main).launch {
-            fetchGameVideos()
-        }
         viewModel.gameVideo.observe(viewLifecycleOwner) { videoModels ->
             gameViewAdapter.setItem(videoModels)
         }
@@ -152,9 +149,6 @@ class HomeFragment : Fragment() {
                 (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
             }
         })
-        CoroutineScope(Dispatchers.Main).launch {
-            fetchMusicVideos()
-        }
         viewModel.musicVideo.observe(viewLifecycleOwner) { videoModels ->
             musicViewAdapter.setItem(videoModels)
         }
@@ -171,9 +165,6 @@ class HomeFragment : Fragment() {
                 (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
             }
         })
-        CoroutineScope(Dispatchers.Main).launch {
-            fetchPetVideos()
-        }
         viewModel.petVideo.observe(viewLifecycleOwner) { videoModels ->
             movieViewAdapter.setItem(videoModels)
         }
@@ -190,9 +181,6 @@ class HomeFragment : Fragment() {
                 (requireActivity() as MainActivity).openVideoDetailFromHome(videoModel)
             }
         })
-        CoroutineScope(Dispatchers.Main).launch {
-            fetchSelectVideo()
-        }
         viewModel.selectVideo.observe(viewLifecycleOwner) { videoModels ->
             selectViewAdapter.setItem(videoModels)
         }
