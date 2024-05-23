@@ -6,7 +6,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 
 @Dao
@@ -18,8 +17,8 @@ interface MyListDAO {
     fun getAllListData(): LiveData<List<HomeVideoModel>>
 
     @Query("SELECT * FROM MYLIST")
-    fun getMyListData() : List<HomeVideoModel>
+    fun getMyListData(): List<HomeVideoModel>
+
     @Delete
     fun deleteData(data: HomeVideoModel)
 }
-

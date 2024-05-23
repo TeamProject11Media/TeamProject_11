@@ -18,9 +18,6 @@ import com.example.teamproject_11.presentation.home.main.adapter.MusicViewAdapte
 import com.example.teamproject_11.presentation.home.main.adapter.SelectViewAdapter
 import com.example.teamproject_11.presentation.home.model.HomeVideoModel
 import com.example.teamproject_11.presentation.main.MainActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -32,9 +29,11 @@ class HomeFragment : Fragment() {
     private lateinit var selectViewAdapter: SelectViewAdapter
 
     private val viewModel by lazy {
-        ViewModelProvider(requireActivity(), HomeViewModel.HomeViewModelFactory())[HomeViewModel::class.java]
+        ViewModelProvider(
+            requireActivity(),
+            HomeViewModel.HomeViewModelFactory()
+        )[HomeViewModel::class.java]
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +59,6 @@ class HomeFragment : Fragment() {
         initMusicVideo()
         initPetVideo()
         initSelectVideo()
-
     }
 
     private fun initViewModel() {
@@ -109,7 +107,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
     private fun initPopularVideo() {
         mostViewAdapter.setOnItemClickListener(object : MostViewAdapter.OnItemClickListener {

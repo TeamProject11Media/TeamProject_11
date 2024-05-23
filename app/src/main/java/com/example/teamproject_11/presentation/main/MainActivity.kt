@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewPager() {
 
-
         val viewPager = binding.mainViewPager
         val tabLayout = binding.tablayout
 
@@ -111,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     fun openVideoDetailFromHome(videoModel: HomeVideoModel) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("ClickItem", videoModel)
@@ -120,11 +118,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initText() {
         binding.tvTbDelete.setOnClickListener {
-            if(fragmentMode == 0){
+            if (fragmentMode == 0) {
                 Log.d("모드 전환", "모드 전환")
                 fragmentMode = 1
                 viewModel.myvideoModeObserve()
-            } else{
+            } else {
                 fragmentMode = 0
                 viewModel.myvideoModeObserve()
                 delete.deleteList.clear()

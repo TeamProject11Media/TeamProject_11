@@ -43,7 +43,6 @@ class MyVideoFragment : Fragment() {
         initColor()
     }
 
-
     //데이터가 갱신될 수 있도록 onResume()을 오버라이딩 해서 해당 리스트 갱신 메소드를 넣었습니다.
     override fun onResume() {
         super.onResume()
@@ -57,7 +56,6 @@ class MyVideoFragment : Fragment() {
         fragmentMode = 0
         viewModel.myvideoModeObserve()
     }
-
 
     private fun initView() {
         viewModel.getMyVideoList(requireActivity())
@@ -77,7 +75,6 @@ class MyVideoFragment : Fragment() {
             })
         }
         binding.myvideoRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
-
 
         binding.btnDelete.setOnClickListener {
             val alert = AlertDialog.Builder(this@MyVideoFragment.context)
@@ -110,10 +107,9 @@ class MyVideoFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun initColor(){
-        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner){
-            if (it==0) (binding.myvideoRecyclerview.adapter as MyVideoAdapter).notifyDataSetChanged()
+    private fun initColor() {
+        viewModel.myVideoFragmentMode.observe(viewLifecycleOwner) {
+            if (it == 0) (binding.myvideoRecyclerview.adapter as MyVideoAdapter).notifyDataSetChanged()
         }
     }
 }
-

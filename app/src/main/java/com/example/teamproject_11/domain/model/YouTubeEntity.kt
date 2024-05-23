@@ -3,7 +3,6 @@ package com.example.teamproject_11.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 data class YouTubeResponseEntity(
     val kind: String?,
     val etag: String?,
@@ -26,7 +25,7 @@ data class YouTubeVideoEntity(
 )
 
 data class SnippetEntity(
-    val publishedAt: String?, //임시로 Date 타입에서 String으로 바꿨습니다
+    val publishedAt: String?, //임시로 Date 타입에서 String으로?
     val channelId: String?,
     val title: String?,
     val description: String?,

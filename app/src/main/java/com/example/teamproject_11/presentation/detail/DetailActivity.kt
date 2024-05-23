@@ -7,12 +7,9 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -37,6 +34,7 @@ class DetailActivity : AppCompatActivity() {
         intent.getParcelableExtra<HomeVideoModel>("ClickItem")
     }
     private lateinit var detailAdapter: DetailAdapter
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +54,6 @@ class DetailActivity : AppCompatActivity() {
         super.onResume()
         setViewMore(binding.detailSummary, binding.detailSummaryMore)
     }
-
 
     private fun initView() {
         val toolBar = binding.detailToolBar
@@ -100,7 +97,8 @@ class DetailActivity : AppCompatActivity() {
         viewModel.data.observe(this) {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             val date = LocalDateTime.parse(it.dateTime, formatter)
-            binding.detailDate.text = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            binding.detailDate.text =
+                date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         }
     }
 
@@ -177,11 +175,13 @@ class DetailActivity : AppCompatActivity() {
             binding.btnShare.setOnClickListener {
                 val share = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, "동영상을 공유합니다!" +
-                            "\n\n${title}" +
-                            "\n\n${image}" +
-                            "\n\n${description}" +
-                            "\n\n${time}")
+                    putExtra(
+                        Intent.EXTRA_TEXT, "동영상을 공유합니다!" +
+                                "\n\n${title}" +
+                                "\n\n${image}" +
+                                "\n\n${description}" +
+                                "\n\n${time}"
+                    )
                     type = "text/plain"
                 }
                 startActivity(Intent.createChooser(share, null))
