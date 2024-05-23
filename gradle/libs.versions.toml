@@ -26,6 +26,11 @@ recyclerview = "1.4.0-alpha01"
 okhttp = "5.0.0-alpha.14"
 loggingInterceptor = "5.0.0-alpha.14"
 coil = "2.6.0"
+glideVersion = "5.0.0-rc01"
+roomRuntime = "2.7.0-alpha02"
+fragmentKtxVersion = "1.8.0-beta01"
+roomCompilerVersion = "2.7.0-alpha02"
+roomKtx = "2.7.0-alpha02"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -55,6 +60,11 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 retrofit-v290 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+github-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glideVersion" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtxVersion" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompilerVersion" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
