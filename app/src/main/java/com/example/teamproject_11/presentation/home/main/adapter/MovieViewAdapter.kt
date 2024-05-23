@@ -23,7 +23,8 @@ class MovieViewAdapter : RecyclerView.Adapter<MovieViewAdapter.MyViewHolder>() {
 
     class MyViewHolder(
         private val binding: ItemCategoryBinding,
-        private val onClick: OnItemClickListener) :
+        private val onClick: OnItemClickListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
             with(binding.ivCategory) {
@@ -60,5 +61,4 @@ class MovieViewAdapter : RecyclerView.Adapter<MovieViewAdapter.MyViewHolder>() {
         this.itemList = data
         notifyDataSetChanged()
     }
-
 }

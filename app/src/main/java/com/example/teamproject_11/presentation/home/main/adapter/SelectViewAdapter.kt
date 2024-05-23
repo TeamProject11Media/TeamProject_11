@@ -23,7 +23,8 @@ class SelectViewAdapter : RecyclerView.Adapter<SelectViewAdapter.MyViewHolder>()
 
     class MyViewHolder(
         private val binding: ItemCategoryBinding,
-        private val onClick: OnItemClickListener) :
+        private val onClick: OnItemClickListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeVideoModel) {
             with(binding.ivCategory) {

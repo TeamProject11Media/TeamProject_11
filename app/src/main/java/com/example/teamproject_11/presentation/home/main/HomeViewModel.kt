@@ -21,11 +21,9 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import retrofit2.HttpException
 
-
 class HomeViewModel(
     private val repository: YouTubeRepository
 ) : ViewModel() {
-
 
     private val _videos = MutableLiveData<List<HomeVideoModel>>()
     val video: LiveData<List<HomeVideoModel>> = _videos
@@ -51,11 +49,10 @@ class HomeViewModel(
     private val _searchVideos = MutableLiveData<List<HomeVideoModel>?>()
     val searchVideo: LiveData<List<HomeVideoModel>?> = _searchVideos
 
-
     var nextPageToken: String? = null
 
     private val _myVideoFragmentMode = MutableLiveData<Int>()
-    val myVideoFragmentMode : LiveData<Int> get() = _myVideoFragmentMode
+    val myVideoFragmentMode: LiveData<Int> get() = _myVideoFragmentMode
     fun fetchPopularVideos() {
         viewModelScope.launch {
             runCatching {
@@ -164,7 +161,7 @@ class HomeViewModel(
         }
     }
 
-    fun fetchSelectVideo(category : String) {
+    fun fetchSelectVideo(category: String) {
         viewModelScope.launch {
             runCatching {
                 val response = repository.getVideoInfo(
@@ -191,31 +188,31 @@ class HomeViewModel(
         }
     }
 
-    fun getMyVideoList(activity : Activity){
+    fun getMyVideoList(activity: Activity) {
         val listDao = MyListDataBase.getMyListDataBase(activity).getMyListDAO()
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
                 val list = listDao.getMyListData()
                 _myVideoList.postValue(list)
                 Log.d("내 리스트 로딩 성공", myVideoList.toString())
-            }.onFailure {e ->
+            }.onFailure { e ->
                 Log.d("내 리스트 로딩 실패", e.toString())
             }
         }
     }
-    fun deleteMyVideoItem(activity : Activity, data :HomeVideoModel){
+
+    fun deleteMyVideoItem(activity: Activity, data: HomeVideoModel) {
         val listDao = MyListDataBase.getMyListDataBase(activity).getMyListDAO()
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
                 listDao.deleteData(data)
                 val list = listDao.getMyListData()
                 _myVideoList.postValue(list)
-            }.onFailure {e ->
+            }.onFailure { e ->
                 Log.d("데이터 삭제 실패", e.toString())
             }
         }
     }
-
 
     fun searchVideos(searchQuery: String) {
         viewModelScope.launch {
@@ -263,6 +260,7 @@ class HomeViewModel(
             }
         }
     }
+
     fun extraSearchVideos(searchQuery: String) {
         viewModelScope.launch {
             runCatching {
@@ -312,7 +310,7 @@ class HomeViewModel(
         }
     }
 
-    fun myvideoModeObserve(){
+    fun myvideoModeObserve() {
         _myVideoFragmentMode.postValue(fragmentMode)
     }
 
